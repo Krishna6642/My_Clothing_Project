@@ -194,12 +194,36 @@
         .product-detail-container { max-width:900px; margin:0 auto; padding:16px 16px 40px; }
         .back-home-btn { background:transparent; color:var(--muted); border:1px solid var(--border); padding:10px 20px; border-radius:50px; cursor:pointer; font-size:12px; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:8px; margin-bottom:16px; transition:all 0.2s; }
         .back-home-btn:hover { border-color:var(--gold); color:var(--gold); }
-        .product-detail-top { display:flex; gap:20px; background:var(--card); border-radius:20px; padding:20px; border:1px solid var(--border); margin-bottom:24px; align-items:flex-start; }
-        .pd-image-wrap { flex:0 0 48%; width: 180px;; height:240px; border-radius:18px; overflow:hidden; background:var(--black); border:1px solid var(--border); position:relative; display: flex;align-items: center;justify-content: center;}
-        @media(min-width:480px){ .pd-image-wrap { flex:0 0 240px; width: 240px; height:300px; } }
-        @media(min-width:768px){ .pd-image-wrap { flex:0 0 340px; width:340px; height:420px; } }
-        .pd-image-wrap img {   width:100%; height:100%; object-fit:contain; }
-        .pd-info { flex:1; min-width:0; }
+      .product-detail-top { 
+    display:flex; 
+    flex-direction: column;
+    gap:20px; 
+    background:var(--card); 
+    border-radius:20px; 
+    padding:20px; 
+    border:1px solid var(--border); 
+    margin-bottom:24px; 
+}
+.pd-image-wrap { 
+    width: 100%; 
+    height: 340px;
+    border-radius:18px; 
+    overflow:hidden; 
+    background:var(--black); 
+    border:1px solid var(--border); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+@media(min-width:600px){ 
+    .product-detail-top { flex-direction: row; align-items: flex-start; }
+    .pd-image-wrap { flex:0 0 260px; width:260px; height:320px; } 
+}
+@media(min-width:768px){ 
+    .pd-image-wrap { flex:0 0 340px; width:340px; height:420px; } 
+}
+.pd-image-wrap img { width:100%; height:100%; object-fit:contain; }
+.pd-info { width: 100%; }
         .detail-brand { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:6px; }
         .detail-title { font-family:'Playfair Display',serif; font-size:clamp(16px,3vw,24px); font-weight:700; color:var(--white); margin-bottom:14px; line-height:1.25; }
         .detail-price { font-size:clamp(20px,4vw,28px); font-weight:700; color:var(--gold); }
