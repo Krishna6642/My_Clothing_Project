@@ -195,10 +195,10 @@
         .back-home-btn { background:transparent; color:var(--muted); border:1px solid var(--border); padding:10px 20px; border-radius:50px; cursor:pointer; font-size:12px; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:8px; margin-bottom:16px; transition:all 0.2s; }
         .back-home-btn:hover { border-color:var(--gold); color:var(--gold); }
         .product-detail-top { display:flex; gap:20px; background:var(--card); border-radius:20px; padding:20px; border:1px solid var(--border); margin-bottom:24px; align-items:flex-start; }
-        .pd-image-wrap { flex:0 0 140px; width:140px; height:180px; border-radius:14px; overflow:hidden; background:var(--black); border:1px solid var(--border); position:relative; }
-        @media(min-width:480px){ .pd-image-wrap { flex:0 0 200px; width:200px; height:240px; } }
-        @media(min-width:768px){ .pd-image-wrap { flex:0 0 280px; width:280px; height:320px; } }
-        .pd-image-wrap img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; }
+        .pd-image-wrap { flex:0 0 48%; width: 180px;; height:240px; border-radius:18px; overflow:hidden; background:var(--black); border:1px solid var(--border); position:relative; display: flex;align-items: center;justify-content: center;}
+        @media(min-width:480px){ .pd-image-wrap { flex:0 0 240px; width: 240px; height:300px; } }
+        @media(min-width:768px){ .pd-image-wrap { flex:0 0 340px; width:340px; height:420px; } }
+        .pd-image-wrap img {   width:100%; height:100%; object-fit:contain; }
         .pd-info { flex:1; min-width:0; }
         .detail-brand { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:6px; }
         .detail-title { font-family:'Playfair Display',serif; font-size:clamp(16px,3vw,24px); font-weight:700; color:var(--white); margin-bottom:14px; line-height:1.25; }
@@ -588,28 +588,28 @@
 const UPI_ID = '8959881879@ptaxis', UPI_NAME = 'RAHUL YADAV';
 
 const products = [
-    {id:1,name:"Gym Pro Track Pant",brand:"Roadster",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner9.jpeg",sizes:["S","M","L","XL"]},
-    {id:2,name:"Performance Track Pant",brand:"HRX",price:399,originalPrice:1199,discount:"67% off",category:"gym",image:"images/banner1.jpeg",sizes:["S","M","L","XL"]},
-    {id:3,name:"Flexi Gym Track Pant",brand:"Puma",price:399,originalPrice:1499,discount:"73% off",category:"gym",image:"images/banner2.jpeg",sizes:["S","M","L","XL"]},
-    {id:4,name:"Ultra Dry Gym Pant",brand:"Nike",price:399,originalPrice:1999,discount:"80% off",category:"gym",image:"images/banner3.jpeg",sizes:["S","M","L","XL"]},
-    {id:5,name:"Sweat Proof Track Pant",brand:"Reebok",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner4.jpeg",sizes:["S","M","L","XL"]},
-    {id:6,name:"Compression Track Pant",brand:"Under Armour",price:399,originalPrice:2199,discount:"82% off",category:"gym",image:"images/banner5.jpeg",sizes:["S","M","L","XL"]},
-    {id:7,name:"Mesh Gym Track Pant",brand:"Decathlon",price:399,originalPrice:999,discount:"60% off",category:"gym",image:"images/banner6.jpeg",sizes:["S","M","L","XL"]},
-    {id:8,name:"Thermal Gym Pant",brand:"Roadster",price:399,originalPrice:1699,discount:"76% off",category:"gym",image:"images/banner7.jpeg",sizes:["S","M","L","XL"]},
-    {id:9,name:"Quick Dry Track Pant",brand:"HRX",price:399,originalPrice:1099,discount:"64% off",category:"gym",image:"images/banner8.jpeg",sizes:["S","M","L","XL"]},
-    {id:10,name:"Stretch Fit Gym Pant",brand:"Puma",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner10.jpeg",sizes:["S","M","L","XL"]},
-    {id:11,name:"Pro Athlete Track Pant",brand:"Adidas",price:399,originalPrice:2499,discount:"84% off",category:"gym",image:"images/banner11.jpeg",sizes:["S","M","L","XL"]},
-    {id:12,name:"Bull Print Bootcut Pant",brand:"Bull & Couture",price:399,originalPrice:1499,discount:"73% off",category:"bull",image:"images/banner12.PNG",sizes:["S","M","L","XL"]},
-    {id:13,name:"Angry Bull Graphic Bootcut",brand:"Bull Nation",price:399,originalPrice:1399,discount:"71% off",category:"bull",image:"images/banner13.PNG",sizes:["S","M","L","XL"]},
-    {id:14,name:"Bull Edition Track Pant",brand:"Bullwear",price:399,originalPrice:1599,discount:"75% off",category:"bull",image:"images/banner14.PNG",sizes:["S","M","L","XL"]},
-    {id:15,name:"Wild Bull Bootcut Pant",brand:"Bull Force",price:399,originalPrice:1799,discount:"78% off",category:"bull",image:"images/banner15.PNG",sizes:["S","M","L","XL"]},
-    {id:16,name:"Premium Cotton Track Pant",brand:"Aurelia",price:399,originalPrice:1899,discount:"79% off",category:"premium",image:"images/banner16.PNG",sizes:["S","M","L","XL"]},
-    {id:17,name:"Luxury Fabric Track Pant",brand:"United Colors",price:399,originalPrice:2199,discount:"82% off",category:"premium",image:"images/banner17.PNG",sizes:["S","M","L","XL"]},
-    {id:18,name:"Supreme Comfort Track Pant",brand:"Adidas",price:399,originalPrice:1999,discount:"80% off",category:"premium",image:"images/banner18.PNG",sizes:["S","M","L","XL"]},
-    {id:19,name:"Premium Velvet Track Pant",brand:"Premium Club",price:399,originalPrice:2999,discount:"87% off",category:"premium",image:"images/banner19.PNG",sizes:["S","M","L","XL"]},
-    {id:20,name:"Luxury Silk Touch Pant",brand:"Luxury Wear",price:399,originalPrice:2799,discount:"86% off",category:"premium",image:"images/banner20.PNG",sizes:["S","M","L","XL"]},
-    {id:21,name:"Royal Premium Fabric",brand:"Royal Club",price:399,originalPrice:2599,discount:"85% off",category:"premium",image:"images/banner21.PNG",sizes:["S","M","L","XL"]},
-    {id:22,name:"Ultra Soft Premium Pant",brand:"SoftWear",price:399,originalPrice:1799,discount:"78% off",category:"premium",image:"images/banner22.PNG",sizes:["S","M","L","XL"]}
+    {id:1,name:"Gym Pro Track Pant",brand:"Roadster",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner9.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:2,name:"Performance Track Pant",brand:"HRX",price:399,originalPrice:1199,discount:"67% off",category:"gym",image:"images/banner1.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:3,name:"Flexi Gym Track Pant",brand:"Puma",price:399,originalPrice:1499,discount:"73% off",category:"gym",image:"images/banner2.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:4,name:"Ultra Dry Gym Pant",brand:"Nike",price:399,originalPrice:1999,discount:"80% off",category:"gym",image:"images/banner3.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:5,name:"Sweat Proof Track Pant",brand:"Reebok",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner4.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:6,name:"Compression Track Pant",brand:"Under Armour",price:399,originalPrice:2199,discount:"82% off",category:"gym",image:"images/banner5.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:7,name:"Mesh Gym Track Pant",brand:"Decathlon",price:399,originalPrice:999,discount:"60% off",category:"gym",image:"images/banner6.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:8,name:"Thermal Gym Pant",brand:"Roadster",price:399,originalPrice:1699,discount:"76% off",category:"gym",image:"images/banner7.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:9,name:"Quick Dry Track Pant",brand:"HRX",price:399,originalPrice:1099,discount:"64% off",category:"gym",image:"images/banner8.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:10,name:"Stretch Fit Gym Pant",brand:"Puma",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner10.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:11,name:"Pro Athlete Track Pant",brand:"Adidas",price:399,originalPrice:2499,discount:"84% off",category:"gym",image:"images/banner11.jpeg",sizes:["S","M","L","XL","XXL"]},
+    {id:12,name:"Bull Print Bootcut Pant",brand:"Bull & Couture",price:399,originalPrice:1499,discount:"73% off",category:"bull",image:"images/banner12.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:13,name:"Angry Bull Graphic Bootcut",brand:"Bull Nation",price:399,originalPrice:1399,discount:"71% off",category:"bull",image:"images/banner13.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:14,name:"Bull Edition Track Pant",brand:"Bullwear",price:399,originalPrice:1599,discount:"75% off",category:"bull",image:"images/banner14.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:15,name:"Wild Bull Bootcut Pant",brand:"Bull Force",price:399,originalPrice:1799,discount:"78% off",category:"bull",image:"images/banner15.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:16,name:"Premium Cotton Track Pant",brand:"Aurelia",price:399,originalPrice:1899,discount:"79% off",category:"premium",image:"images/banner16.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:17,name:"Luxury Fabric Track Pant",brand:"United Colors",price:399,originalPrice:2199,discount:"82% off",category:"premium",image:"images/banner17.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:18,name:"Supreme Comfort Track Pant",brand:"Adidas",price:399,originalPrice:1999,discount:"80% off",category:"premium",image:"images/banner18.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:19,name:"Premium Velvet Track Pant",brand:"Premium Club",price:399,originalPrice:2999,discount:"87% off",category:"premium",image:"images/banner19.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:20,name:"Luxury Silk Touch Pant",brand:"Luxury Wear",price:399,originalPrice:2799,discount:"86% off",category:"premium",image:"images/banner20.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:21,name:"Royal Premium Fabric",brand:"Royal Club",price:399,originalPrice:2599,discount:"85% off",category:"premium",image:"images/banner21.PNG",sizes:["S","M","L","XL","XXL"]},
+    {id:22,name:"Ultra Soft Premium Pant",brand:"SoftWear",price:399,originalPrice:1799,discount:"78% off",category:"premium",image:"images/banner22.PNG",sizes:["S","M","L","XL","XXL"]}
 ];
 
 let cart = [], currentProduct = null, selectedSize = "M", productQuantity = 1, currentDisplayCategory = 'gym', newOrderProduct = null, newOrderQty = 1;
