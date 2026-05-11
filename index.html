@@ -190,48 +190,80 @@
         .contact-info-item i { color:var(--gold); width:16px; }
         .close-contact-btn { background:var(--gold); color:var(--black); padding:10px 24px; border:none; border-radius:10px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:700; font-size:12px; margin-top:12px; transition:all 0.2s; }
 
-        /* PRODUCT DETAIL */
-        .product-detail-container { max-width:1200px; margin:0 auto; padding:16px; }
-        .back-home-btn { background:transparent; color:var(--muted); border:1px solid var(--border); padding:10px 20px; border-radius:50px; cursor:pointer; font-size:12px; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:8px; margin-bottom:20px; transition:all 0.2s; }
+        /* =============================================
+           PRODUCT DETAIL — FIXED LAYOUT
+           Image chhoti fixed height, description upar
+           Recommended section neeche full width
+        ============================================= */
+        .product-detail-container { max-width:900px; margin:0 auto; padding:16px 16px 40px; }
+        .back-home-btn { background:transparent; color:var(--muted); border:1px solid var(--border); padding:10px 20px; border-radius:50px; cursor:pointer; font-size:12px; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:8px; margin-bottom:16px; transition:all 0.2s; }
         .back-home-btn:hover { border-color:var(--gold); color:var(--gold); }
-        .product-detail-main { display:grid; grid-template-columns:1fr; gap:28px; background:var(--card); border-radius:20px; padding:24px; border:1px solid var(--border); }
-        @media(min-width:768px){.product-detail-main{grid-template-columns:1fr 1fr;padding:40px;gap:48px}}
-        .main-image-container { position:relative; width:100%; padding-top:100%; background:var(--black); border-radius:16px; overflow:hidden; border:1px solid var(--border); }
-        .main-image { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; }
-        .detail-brand { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:8px; }
-        .detail-title { font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); font-weight:700; color:var(--white); margin-bottom:16px; line-height:1.2; }
-        .detail-price { font-size:28px; font-weight:700; color:var(--gold); }
-        .detail-original { font-size:14px; color:var(--muted); text-decoration:line-through; margin-left:8px; }
-        .detail-discount { font-size:11px; color:#4ade80; background:rgba(74,222,128,0.1); padding:3px 10px; border-radius:50px; font-weight:600; }
-        .size-label,.quantity-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:600; margin:20px 0 10px; }
-        .size-options { display:flex; gap:10px; flex-wrap:wrap; }
-        .size-btn { width:46px; height:46px; border:1px solid var(--border); background:var(--card); border-radius:10px; cursor:pointer; font-weight:600; font-size:13px; color:var(--text); transition:all 0.2s; }
+
+        /* TOP SECTION: image left, info right (side by side on mobile too via row) */
+        .product-detail-top {
+            display:flex;
+            gap:20px;
+            background:var(--card);
+            border-radius:20px;
+            padding:20px;
+            border:1px solid var(--border);
+            margin-bottom:24px;
+            align-items:flex-start;
+        }
+
+        /* Image — fixed compact size */
+        .pd-image-wrap {
+            flex:0 0 140px;
+            width:140px;
+            height:180px;
+            border-radius:14px;
+            overflow:hidden;
+            background:var(--black);
+            border:1px solid var(--border);
+            position:relative;
+        }
+        @media(min-width:480px){
+            .pd-image-wrap { flex:0 0 200px; width:200px; height:240px; }
+        }
+        @media(min-width:768px){
+            .pd-image-wrap { flex:0 0 280px; width:280px; height:320px; }
+        }
+        .pd-image-wrap img {
+            position:absolute; top:0; left:0;
+            width:100%; height:100%;
+            object-fit:contain;
+        }
+
+        /* Info — takes remaining space */
+        .pd-info { flex:1; min-width:0; }
+        .detail-brand { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:6px; }
+        .detail-title { font-family:'Playfair Display',serif; font-size:clamp(16px,3vw,24px); font-weight:700; color:var(--white); margin-bottom:14px; line-height:1.25; }
+        .detail-price { font-size:clamp(20px,4vw,28px); font-weight:700; color:var(--gold); }
+        .detail-original { font-size:13px; color:var(--muted); text-decoration:line-through; margin-left:6px; }
+        .detail-discount { font-size:11px; color:#4ade80; background:rgba(74,222,128,0.1); padding:3px 10px; border-radius:50px; font-weight:600; display:inline-block; margin-top:4px; }
+        .price-row { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:4px; }
+        .size-label,.quantity-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:600; margin:16px 0 8px; display:block; }
+        .size-options { display:flex; gap:8px; flex-wrap:wrap; }
+        .size-btn { width:40px; height:40px; border:1px solid var(--border); background:var(--card); border-radius:8px; cursor:pointer; font-weight:600; font-size:12px; color:var(--text); transition:all 0.2s; }
         .size-btn.selected { border-color:var(--gold); background:var(--gold); color:var(--black); }
-        .quantity-selector { display:flex; align-items:center; gap:16px; }
-        .quantity-btn { width:38px; height:38px; border:1px solid var(--border); background:var(--card); border-radius:8px; cursor:pointer; font-size:18px; color:var(--white); display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+        .quantity-selector { display:flex; align-items:center; gap:12px; }
+        .quantity-btn { width:34px; height:34px; border:1px solid var(--border); background:var(--card); border-radius:8px; cursor:pointer; font-size:16px; color:var(--white); display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
         .quantity-btn:hover { border-color:var(--gold); color:var(--gold); }
-        .qty-display { font-size:18px; font-weight:600; min-width:30px; text-align:center; color:var(--white); }
-        .action-buttons { display:flex; gap:14px; margin:28px 0; flex-wrap:wrap; }
-        .btn-add-cart,.btn-buy-now { flex:1; padding:14px; border:none; border-radius:12px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; transition:all 0.3s; }
+        .qty-display { font-size:16px; font-weight:600; min-width:28px; text-align:center; color:var(--white); }
+        .action-buttons { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
+        .btn-add-cart,.btn-buy-now { flex:1; min-width:110px; padding:12px 10px; border:none; border-radius:12px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:700; font-size:11px; letter-spacing:0.5px; text-transform:uppercase; transition:all 0.3s; }
         .btn-add-cart { background:transparent; color:var(--gold); border:1px solid rgba(201,168,76,0.4); }
         .btn-add-cart:hover { background:var(--gold-dim); border-color:var(--gold); }
         .btn-buy-now { background:var(--gold); color:var(--black); }
         .btn-buy-now:hover { background:var(--gold-light); box-shadow:0 8px 24px rgba(201,168,76,0.35); }
-        .btn-buy-now:disabled { opacity:0.8; cursor:not-allowed; }
-        .related-section { margin-top:40px; padding-top:32px; border-top:1px solid var(--border); }
-        .related-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); margin-bottom:20px; }
-        .related-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
-        .related-card { background:var(--card); border-radius:14px; overflow:hidden; cursor:pointer; border:1px solid var(--border); transition:all 0.3s; }
-        .related-card:hover { transform:translateY(-3px); border-color:rgba(201,168,76,0.3); }
-        .related-img-container { position:relative; width:100%; padding-top:100%; background:var(--black); }
-        .related-img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; }
-        .related-info { padding:10px; }
-        .related-name { font-size:12px; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .related-price { color:var(--gold); font-weight:700; font-size:13px; margin-top:3px; }
-        .success-icon-wrap { text-align:center; margin-bottom:16px; }
-        .success-icon-wrap i { font-size:64px; color:#4ade80; }
-        .success-title { font-family:'Playfair Display',serif; font-size:24px; text-align:center; color:var(--white); margin-bottom:12px; }
-        .success-info { background:var(--card); border-radius:14px; padding:16px; font-size:13px; line-height:1.7; border:1px solid var(--border); margin-bottom:20px; }
+
+        /* RECOMMENDED SECTION — full width below */
+        .recommended-section { margin-top:8px; }
+        .rec-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+        .rec-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(201,168,76,0.4),transparent); }
+        .recommended-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+        @media(min-width:600px){ .recommended-grid { grid-template-columns:repeat(3,1fr); } }
+        @media(min-width:900px){ .recommended-grid { grid-template-columns:repeat(4,1fr); } }
 
         /* FOOTER */
         .footer { background:var(--dark); border-top:1px solid var(--border); padding:40px 24px 24px; margin-top:40px; }
@@ -250,7 +282,7 @@
         .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--card); color:var(--white); padding:12px 24px; border-radius:50px; z-index:99999; font-size:13px; font-weight:500; white-space:nowrap; border:1px solid var(--border); animation:toastAnim 3s ease; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
         @keyframes toastAnim { 0%{opacity:0;bottom:0}10%{opacity:1;bottom:24px}90%{opacity:1;bottom:24px}100%{opacity:0;bottom:0} }
 
-        @media(min-width:768px){.product-grid,.related-grid{grid-template-columns:repeat(4,1fr);gap:20px}}
+        @media(min-width:768px){.product-grid{grid-template-columns:repeat(4,1fr);gap:20px}}
         @media(max-width:480px){.product-grid{gap:10px}.hero-banner{padding:32px 20px}}
 
         .btn-spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(0,0,0,0.3); border-top-color:var(--black); border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:6px; }
@@ -322,12 +354,6 @@
         .opay-split-label { color:var(--muted); }
         .opay-split-val { color:var(--gold); font-weight:600; }
         .opay-split-val.green { color:var(--green); font-size:15px; }
-        .opay-timer-bar-wrap { margin-top:14px; display:none; }
-        .opay-timer-bar-wrap.show { display:block; }
-        .opay-timer-label { font-size:11px; color:var(--muted); margin-bottom:6px; display:flex; justify-content:space-between; }
-        .opay-timer-label span { color:var(--gold); font-weight:600; }
-        .opay-timer-track { height:6px; background:rgba(255,255,255,0.06); border-radius:10px; overflow:hidden; }
-        .opay-timer-fill { height:100%; background:linear-gradient(90deg,var(--green),var(--gold)); border-radius:10px; transition:width 1s linear; width:100%; }
         .opay-place-btn { width:100%; padding:17px; margin-top:20px; background:var(--gold); color:var(--black); border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:10px; }
         .opay-place-btn:hover { background:var(--gold-light); box-shadow:0 10px 30px rgba(201,168,76,0.4); }
         .opay-place-btn:disabled { opacity:0.6; cursor:not-allowed; }
@@ -345,6 +371,11 @@
         .nsuccess-detail-row span:last-child { color:var(--white); font-weight:600; }
         .nsuccess-shop-btn { width:100%; padding:16px; background:var(--gold); color:var(--black); border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer; transition:all 0.3s; }
         .nsuccess-shop-btn:hover { background:var(--gold-light); }
+        /* success modal old */
+        .success-icon-wrap { text-align:center; margin-bottom:16px; }
+        .success-icon-wrap i { font-size:64px; color:#4ade80; }
+        .success-title { font-family:'Playfair Display',serif; font-size:24px; text-align:center; color:var(--white); margin-bottom:12px; }
+        .success-info { background:var(--card); border-radius:14px; padding:16px; font-size:13px; line-height:1.7; border:1px solid var(--border); margin-bottom:20px; }
    </style>
 </head>
 <body>
@@ -497,27 +528,17 @@
             <button class="opay-open-upi-btn" onclick="openOpayUPI()"><i class="fas fa-mobile-alt"></i> Open UPI App to Pay ₹<span id="opayUpiAmtDisplay">0</span></button>
             <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">GPay / PhonePe / Paytm → send to UPI ID → order will be confirmed automatically.</p>
         </div>
-       <div class="opay-detail-box opay-cod-box" id="opayCodBox">
-
-    <strong style="color:var(--gold);font-size:13px;">
-        🚚 50% Advance + Cash on Delivery
-    </strong>
-
-    <div class="opay-split-rows" id="opaySplitRows"></div>
-
-    <button class="opay-open-upi-btn"
-        onclick="openOpayCODUPI()"
-        style="border-color:rgba(201,168,76,0.4);color:var(--gold);background:rgba(201,168,76,0.1);margin-top:10px;">
-
-        <i class="fas fa-mobile-alt"></i>
-        Pay Advance ₹<span id="opayCodAdvDisplay">0</span> via UPI
-    </button>
-
-    <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">
-        Pay 50% advance via UPI, rest ₹<span id="opayCodRestDisplay">0</span> cash on delivery.
-    </p>
-
-</div>
+        <div class="opay-detail-box opay-cod-box" id="opayCodBox">
+            <strong style="color:var(--gold);font-size:13px;">🚚 50% Advance + Cash on Delivery</strong>
+            <div class="opay-split-rows" id="opaySplitRows"></div>
+            <button class="opay-open-upi-btn" onclick="openOpayCODUPI()" style="border-color:rgba(201,168,76,0.4);color:var(--gold);background:rgba(201,168,76,0.1);margin-top:10px;">
+                <i class="fas fa-mobile-alt"></i>
+                Pay Advance ₹<span id="opayCodAdvDisplay">0</span> via UPI
+            </button>
+            <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">
+                Pay 50% advance via UPI, rest ₹<span id="opayCodRestDisplay">0</span> cash on delivery.
+            </p>
+        </div>
         <button class="opay-place-btn" id="opayPlaceBtn" disabled onclick="placeNewOrder()">Select a payment method</button>
     </div>
 </div>
@@ -530,392 +551,400 @@
         <button class="nsuccess-shop-btn" id="nsuccessShopBtn">🛍️ Continue Shopping</button>
     </div>
 </div>
-<div id="mainContent"><div class="container"><div class="hero-banner"><span class="hero-eyebrow">Exclusive Collection 2025</span><h1 class="hero-title">Big Fashion <em>Festival</em></h1><div class="hero-divider"></div><p class="hero-sub">Premium quality. Unbeatable prices. Delivered to your door.</p><div class="hero-badges"><span class="hero-badge">🔥 Up to 80% Off</span><span class="hero-badge">📦 Free Shipping</span><span class="hero-badge">📲 UPI & COD Available</span></div></div><div class="slider-section" id="sliderSection"><div class="slider-wrapper"><button class="slider-btn slider-btn-left" id="gymSliderLeft">❮</button><div class="slider-container"><div class="slider-track" id="gymSliderTrack"></div></div><button class="slider-btn slider-btn-right" id="gymSliderRight">❯</button></div></div><div class="category-buttons-section"><span class="section-label">Shop by Category</span><div class="category-buttons-grid"><div class="category-btn" data-cat="gym"><span class="category-btn-icon">💪</span><div class="category-btn-name">GYM First Choice</div></div><div class="category-btn" data-cat="bull"><span class="category-btn-icon">🐂</span><div class="category-btn-name">BULL PRINT</div></div><div class="category-btn" data-cat="premium"><span class="category-btn-icon">✨</span><div class="category-btn-name">Extra Premium</div></div></div></div><h2 class="section-title" id="categoryTitle">Recommended For You</h2><div class="product-grid" id="productGrid"></div></div></div>
-<div id="productDetailPage" style="display:none;"><div class="product-detail-container" id="productDetailContainer"></div></div>
-<div class="overlay" id="cartOverlay"></div>
-<div class="cart-sidebar" id="cartSidebar"><div class="cart-header"><h3>My Bag</h3><i class="fas fa-times" id="closeCart"></i></div><div class="cart-items" id="cartItems"></div><div class="cart-footer"><div class="cart-total">Total: ₹<span id="cartTotal">0</span></div><button class="checkout-btn" id="checkoutBtn">Proceed to Checkout →</button></div></div>
-<div class="footer"><div class="footer-top"><div class="footer-logo">CLOTHING INDIA</div><div class="footer-tagline">Premium Fashion · Made for India</div><div class="footer-divider"></div></div><div class="footer-container"><div class="footer-section"><h4>Company</h4><a>About Us</a><a>Contact Us</a></div><div class="footer-section"><h4>Policy</h4><a>Return Policy</a><a>Privacy Policy</a></div><div class="footer-section"><h4>Help</h4><a>Payments</a><a>Shipping</a></div><div class="footer-section"><h4>Contact</h4><p>Indore - 452001</p><p>valueclothingc@gmail.com</p></div></div><div class="footer-bottom">© 2025 Clothing India. All rights reserved.</div></div>
-<script>
 
+<div id="mainContent">
+    <div class="container">
+        <div class="hero-banner">
+            <span class="hero-eyebrow">Exclusive Collection 2025</span>
+            <h1 class="hero-title">Big Fashion <em>Festival</em></h1>
+            <div class="hero-divider"></div>
+            <p class="hero-sub">Premium quality. Unbeatable prices. Delivered to your door.</p>
+            <div class="hero-badges">
+                <span class="hero-badge">🔥 Up to 80% Off</span>
+                <span class="hero-badge">📦 Free Shipping</span>
+                <span class="hero-badge">📲 UPI & COD Available</span>
+            </div>
+        </div>
+        <div class="slider-section" id="sliderSection">
+            <div class="slider-wrapper">
+                <button class="slider-btn slider-btn-left" id="gymSliderLeft">❮</button>
+                <div class="slider-container">
+                    <div class="slider-track" id="gymSliderTrack"></div>
+                </div>
+                <button class="slider-btn slider-btn-right" id="gymSliderRight">❯</button>
+            </div>
+        </div>
+        <div class="category-buttons-section">
+            <span class="section-label">Shop by Category</span>
+            <div class="category-buttons-grid">
+                <div class="category-btn" data-cat="gym"><span class="category-btn-icon">💪</span><div class="category-btn-name">GYM First Choice</div></div>
+                <div class="category-btn" data-cat="bull"><span class="category-btn-icon">🐂</span><div class="category-btn-name">BULL PRINT</div></div>
+                <div class="category-btn" data-cat="premium"><span class="category-btn-icon">✨</span><div class="category-btn-name">Extra Premium</div></div>
+            </div>
+        </div>
+        <h2 class="section-title" id="categoryTitle">Recommended For You</h2>
+        <div class="product-grid" id="productGrid"></div>
+    </div>
+</div>
+
+<div id="productDetailPage" style="display:none;">
+    <div class="product-detail-container" id="productDetailContainer"></div>
+</div>
+
+<div class="overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header"><h3>My Bag</h3><i class="fas fa-times" id="closeCart"></i></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+        <div class="cart-total">Total: ₹<span id="cartTotal">0</span></div>
+        <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout →</button>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer-top">
+        <div class="footer-logo">CLOTHING INDIA</div>
+        <div class="footer-tagline">Premium Fashion · Made for India</div>
+        <div class="footer-divider"></div>
+    </div>
+    <div class="footer-container">
+        <div class="footer-section"><h4>Company</h4><a>About Us</a><a>Contact Us</a></div>
+        <div class="footer-section"><h4>Policy</h4><a>Return Policy</a><a>Privacy Policy</a></div>
+        <div class="footer-section"><h4>Help</h4><a>Payments</a><a>Shipping</a></div>
+        <div class="footer-section"><h4>Contact</h4><p>Indore - 452001</p><p>valueclothingc@gmail.com</p></div>
+    </div>
+    <div class="footer-bottom">© 2025 Clothing India. All rights reserved.</div>
+</div>
+
+<script>
 const UPI_ID='krishna6642@ybl', UPI_NAME='Shrikrushna';
-const products=[{id:1,name:"Gym Pro Track Pant",brand:"Roadster",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner9.jpeg",sizes:["S","M","L","XL"]},{id:2,name:"Performance Track Pant",brand:"HRX",price:399,originalPrice:1199,discount:"67% off",category:"gym",image:"images/banner1.jpeg",sizes:["S","M","L","XL"]},{id:3,name:"Flexi Gym Track Pant",brand:"Puma",price:399,originalPrice:1499,discount:"73% off",category:"gym",image:"images/banner2.jpeg",sizes:["S","M","L","XL"]},{id:4,name:"Ultra Dry Gym Pant",brand:"Nike",price:399,originalPrice:1999,discount:"80% off",category:"gym",image:"images/banner3.jpeg",sizes:["S","M","L","XL"]},{id:5,name:"Sweat Proof Track Pant",brand:"Reebok",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner4.jpeg",sizes:["S","M","L","XL"]},{id:6,name:"Compression Track Pant",brand:"Under Armour",price:399,originalPrice:2199,discount:"82% off",category:"gym",image:"images/banner5.jpeg",sizes:["S","M","L","XL"]},{id:7,name:"Mesh Gym Track Pant",brand:"Decathlon",price:399,originalPrice:999,discount:"60% off",category:"gym",image:"images/banner6.jpeg",sizes:["S","M","L","XL"]},{id:8,name:"Thermal Gym Pant",brand:"Roadster",price:399,originalPrice:1699,discount:"76% off",category:"gym",image:"images/banner7.jpeg",sizes:["S","M","L","XL"]},{id:9,name:"Quick Dry Track Pant",brand:"HRX",price:399,originalPrice:1099,discount:"64% off",category:"gym",image:"images/banner8.jpeg",sizes:["S","M","L","XL"]},{id:10,name:"Stretch Fit Gym Pant",brand:"Puma",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner10.jpeg",sizes:["S","M","L","XL"]},{id:11,name:"Pro Athlete Track Pant",brand:"Adidas",price:399,originalPrice:2499,discount:"84% off",category:"gym",image:"images/banner11.jpeg",sizes:["S","M","L","XL"]},{id:12,name:"Bull Print Bootcut Pant",brand:"Bull & Couture",price:399,originalPrice:1499,discount:"73% off",category:"bull",image:"images/banner12.PNG",sizes:["S","M","L","XL"]},{id:13,name:"Angry Bull Graphic Bootcut",brand:"Bull Nation",price:399,originalPrice:1399,discount:"71% off",category:"bull",image:"images/banner13.PNG",sizes:["S","M","L","XL"]},{id:14,name:"Bull Edition Track Pant",brand:"Bullwear",price:399,originalPrice:1599,discount:"75% off",category:"bull",image:"images/banner14.PNG",sizes:["S","M","L","XL"]},{id:15,name:"Wild Bull Bootcut Pant",brand:"Bull Force",price:399,originalPrice:1799,discount:"78% off",category:"bull",image:"images/banner15.PNG",sizes:["S","M","L","XL"]},{id:16,name:"Premium Cotton Track Pant",brand:"Aurelia",price:399,originalPrice:1899,discount:"79% off",category:"premium",image:"images/banner16.PNG",sizes:["S","M","L","XL"]},{id:17,name:"Luxury Fabric Track Pant",brand:"United Colors",price:399,originalPrice:2199,discount:"82% off",category:"premium",image:"images/banner17.PNG",sizes:["S","M","L","XL"]},{id:18,name:"Supreme Comfort Track Pant",brand:"Adidas",price:399,originalPrice:1999,discount:"80% off",category:"premium",image:"images/banner18.PNG",sizes:["S","M","L","XL"]},{id:19,name:"Premium Velvet Track Pant",brand:"Premium Club",price:399,originalPrice:2999,discount:"87% off",category:"premium",image:"images/banner19.PNG",sizes:["S","M","L","XL"]},{id:20,name:"Luxury Silk Touch Pant",brand:"Luxury Wear",price:399,originalPrice:2799,discount:"86% off",category:"premium",image:"images/banner20.PNG",sizes:["S","M","L","XL"]},{id:21,name:"Royal Premium Fabric",brand:"Royal Club",price:399,originalPrice:2599,discount:"85% off",category:"premium",image:"images/banner21.PNG",sizes:["S","M","L","XL"]},{id:22,name:"Ultra Soft Premium Pant",brand:"SoftWear",price:399,originalPrice:1799,discount:"78% off",category:"premium",image:"images/banner22.PNG",sizes:["S","M","L","XL"]}];
+const products=[
+    {id:1,name:"Gym Pro Track Pant",brand:"Roadster",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner9.jpeg",sizes:["S","M","L","XL"]},
+    {id:2,name:"Performance Track Pant",brand:"HRX",price:399,originalPrice:1199,discount:"67% off",category:"gym",image:"images/banner1.jpeg",sizes:["S","M","L","XL"]},
+    {id:3,name:"Flexi Gym Track Pant",brand:"Puma",price:399,originalPrice:1499,discount:"73% off",category:"gym",image:"images/banner2.jpeg",sizes:["S","M","L","XL"]},
+    {id:4,name:"Ultra Dry Gym Pant",brand:"Nike",price:399,originalPrice:1999,discount:"80% off",category:"gym",image:"images/banner3.jpeg",sizes:["S","M","L","XL"]},
+    {id:5,name:"Sweat Proof Track Pant",brand:"Reebok",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner4.jpeg",sizes:["S","M","L","XL"]},
+    {id:6,name:"Compression Track Pant",brand:"Under Armour",price:399,originalPrice:2199,discount:"82% off",category:"gym",image:"images/banner5.jpeg",sizes:["S","M","L","XL"]},
+    {id:7,name:"Mesh Gym Track Pant",brand:"Decathlon",price:399,originalPrice:999,discount:"60% off",category:"gym",image:"images/banner6.jpeg",sizes:["S","M","L","XL"]},
+    {id:8,name:"Thermal Gym Pant",brand:"Roadster",price:399,originalPrice:1699,discount:"76% off",category:"gym",image:"images/banner7.jpeg",sizes:["S","M","L","XL"]},
+    {id:9,name:"Quick Dry Track Pant",brand:"HRX",price:399,originalPrice:1099,discount:"64% off",category:"gym",image:"images/banner8.jpeg",sizes:["S","M","L","XL"]},
+    {id:10,name:"Stretch Fit Gym Pant",brand:"Puma",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner10.jpeg",sizes:["S","M","L","XL"]},
+    {id:11,name:"Pro Athlete Track Pant",brand:"Adidas",price:399,originalPrice:2499,discount:"84% off",category:"gym",image:"images/banner11.jpeg",sizes:["S","M","L","XL"]},
+    {id:12,name:"Bull Print Bootcut Pant",brand:"Bull & Couture",price:399,originalPrice:1499,discount:"73% off",category:"bull",image:"images/banner12.PNG",sizes:["S","M","L","XL"]},
+    {id:13,name:"Angry Bull Graphic Bootcut",brand:"Bull Nation",price:399,originalPrice:1399,discount:"71% off",category:"bull",image:"images/banner13.PNG",sizes:["S","M","L","XL"]},
+    {id:14,name:"Bull Edition Track Pant",brand:"Bullwear",price:399,originalPrice:1599,discount:"75% off",category:"bull",image:"images/banner14.PNG",sizes:["S","M","L","XL"]},
+    {id:15,name:"Wild Bull Bootcut Pant",brand:"Bull Force",price:399,originalPrice:1799,discount:"78% off",category:"bull",image:"images/banner15.PNG",sizes:["S","M","L","XL"]},
+    {id:16,name:"Premium Cotton Track Pant",brand:"Aurelia",price:399,originalPrice:1899,discount:"79% off",category:"premium",image:"images/banner16.PNG",sizes:["S","M","L","XL"]},
+    {id:17,name:"Luxury Fabric Track Pant",brand:"United Colors",price:399,originalPrice:2199,discount:"82% off",category:"premium",image:"images/banner17.PNG",sizes:["S","M","L","XL"]},
+    {id:18,name:"Supreme Comfort Track Pant",brand:"Adidas",price:399,originalPrice:1999,discount:"80% off",category:"premium",image:"images/banner18.PNG",sizes:["S","M","L","XL"]},
+    {id:19,name:"Premium Velvet Track Pant",brand:"Premium Club",price:399,originalPrice:2999,discount:"87% off",category:"premium",image:"images/banner19.PNG",sizes:["S","M","L","XL"]},
+    {id:20,name:"Luxury Silk Touch Pant",brand:"Luxury Wear",price:399,originalPrice:2799,discount:"86% off",category:"premium",image:"images/banner20.PNG",sizes:["S","M","L","XL"]},
+    {id:21,name:"Royal Premium Fabric",brand:"Royal Club",price:399,originalPrice:2599,discount:"85% off",category:"premium",image:"images/banner21.PNG",sizes:["S","M","L","XL"]},
+    {id:22,name:"Ultra Soft Premium Pant",brand:"SoftWear",price:399,originalPrice:1799,discount:"78% off",category:"premium",image:"images/banner22.PNG",sizes:["S","M","L","XL"]}
+];
+
 let cart=[],currentProduct=null,selectedSize="M",productQuantity=1,currentDisplayCategory='gym',selectedPaymentMethod=null,newOrderProduct=null,newOrderQty=1,newOpayMethod=null;
 emailjs.init({publicKey:"4_CPRmnMdVSjbGh84"});
+
 function loadCart(){const s=localStorage.getItem('clothingCart');cart=s?JSON.parse(s):[];updateCartUI();}
 function saveCart(){localStorage.setItem('clothingCart',JSON.stringify(cart));updateCartUI();}
-function updateCartUI(){const count=cart.reduce((s,i)=>s+i.quantity,0);document.getElementById("cartCount").textContent=count;const itemsDiv=document.getElementById("cartItems");let total=0;if(!cart.length){itemsDiv.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted);">Your bag is empty 🛍️</p>';document.getElementById("cartTotal").textContent="0";return;}itemsDiv.innerHTML=cart.map(item=>{total+=item.price*item.quantity;return`<div class="cart-item"><img src="${item.image}" class="cart-item-image"><div class="cart-item-details"><div class="cart-item-brand">${item.brand}</div><div class="cart-item-title">${item.name}</div><div class="cart-item-price">₹${item.price}</div><div class="cart-quantity"><button onclick="updateQuantity(${item.id},-1)">−</button><span style="color:var(--white);font-weight:600;">${item.quantity}</span><button onclick="updateQuantity(${item.id},1)">+</button><button onclick="removeFromCart(${item.id})" class="del-btn">Remove</button></div></div></div>`;}).join('');document.getElementById("cartTotal").textContent=total.toLocaleString('en-IN');}
+function updateCartUI(){
+    const count=cart.reduce((s,i)=>s+i.quantity,0);
+    document.getElementById("cartCount").textContent=count;
+    const itemsDiv=document.getElementById("cartItems");
+    let total=0;
+    if(!cart.length){itemsDiv.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted);">Your bag is empty 🛍️</p>';document.getElementById("cartTotal").textContent="0";return;}
+    itemsDiv.innerHTML=cart.map(item=>{total+=item.price*item.quantity;return`<div class="cart-item"><img src="${item.image}" class="cart-item-image"><div class="cart-item-details"><div class="cart-item-brand">${item.brand}</div><div class="cart-item-title">${item.name}</div><div class="cart-item-price">₹${item.price}</div><div class="cart-quantity"><button onclick="updateQuantity(${item.id},-1)">−</button><span style="color:var(--white);font-weight:600;">${item.quantity}</span><button onclick="updateQuantity(${item.id},1)">+</button><button onclick="removeFromCart(${item.id})" class="del-btn">Remove</button></div></div></div>`;}).join('');
+    document.getElementById("cartTotal").textContent=total.toLocaleString('en-IN');
+}
 window.updateQuantity=(id,d)=>{const i=cart.find(i=>i.id===id);if(i){i.quantity+=d;if(i.quantity<=0)cart=cart.filter(i=>i.id!==id);saveCart();}};
 window.removeFromCart=id=>{cart=cart.filter(i=>i.id!==id);saveCart();showToast("Removed from bag");};
 function addToCart(pid){const p=products.find(p=>p.id===pid);const e=cart.find(i=>i.id===pid);if(e)e.quantity++;else cart.push({...p,quantity:1});saveCart();showToast(`${p.name} added to bag ✓`);}
 function showToast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
-window.selectPayment=function(method){selectedPaymentMethod=method;const total=cart.reduce((s,i)=>s+i.price*i.quantity,0),advance=Math.ceil(total/2);document.getElementById('optUPI').classList.toggle('selected',method==='upi');document.getElementById('optCOD').classList.toggle('selected',method==='cod');if(method==='upi'){document.getElementById('upiInfoBox').classList.add('show');document.getElementById('codSplitBox').classList.remove('show');document.getElementById('upiDeepLink').setAttribute('data-url',`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`);document.getElementById('placeOrderBtn').textContent='✅ Place Order (UPI Full Payment)';}else{document.getElementById('codSplitBox').classList.add('show');document.getElementById('upiInfoBox').classList.remove('show');document.getElementById('splitTotal').textContent=`₹${total.toLocaleString('en-IN')}`;document.getElementById('splitAdvance').textContent=`₹${advance.toLocaleString('en-IN')}`;document.getElementById('splitCOD').textContent=`₹${(total-advance).toLocaleString('en-IN')}`;document.getElementById('splitFinalTotal').textContent=`₹${total.toLocaleString('en-IN')}`;document.getElementById('upiDeepLinkCOD').setAttribute('data-url',`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${advance}&cu=INR&tn=${encodeURIComponent('Clothing India Advance 50%')}`);document.getElementById('placeOrderBtn').textContent='✅ Confirm Order (50% Advance + COD)';}};
+
+window.selectPayment=function(method){
+    selectedPaymentMethod=method;
+    const total=cart.reduce((s,i)=>s+i.price*i.quantity,0),advance=Math.ceil(total/2);
+    document.getElementById('optUPI').classList.toggle('selected',method==='upi');
+    document.getElementById('optCOD').classList.toggle('selected',method==='cod');
+    if(method==='upi'){
+        document.getElementById('upiInfoBox').classList.add('show');
+        document.getElementById('codSplitBox').classList.remove('show');
+        document.getElementById('upiDeepLink').setAttribute('data-url',`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`);
+        document.getElementById('placeOrderBtn').textContent='✅ Place Order (UPI Full Payment)';
+    }else{
+        document.getElementById('codSplitBox').classList.add('show');
+        document.getElementById('upiInfoBox').classList.remove('show');
+        document.getElementById('splitTotal').textContent=`₹${total.toLocaleString('en-IN')}`;
+        document.getElementById('splitAdvance').textContent=`₹${advance.toLocaleString('en-IN')}`;
+        document.getElementById('splitCOD').textContent=`₹${(total-advance).toLocaleString('en-IN')}`;
+        document.getElementById('splitFinalTotal').textContent=`₹${total.toLocaleString('en-IN')}`;
+        document.getElementById('upiDeepLinkCOD').setAttribute('data-url',`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${advance}&cu=INR&tn=${encodeURIComponent('Clothing India Advance 50%')}`);
+        document.getElementById('placeOrderBtn').textContent='✅ Confirm Order (50% Advance + COD)';
+    }
+};
 window.openUPI=e=>{e.preventDefault();const u=e.currentTarget.getAttribute('data-url');if(u)window.location.href=u;};
 window.openUPICOD=e=>{e.preventDefault();const u=e.currentTarget.getAttribute('data-url');if(u)window.location.href=u;};
-function openCheckout(){if(!cart.length){showToast("Your bag is empty!");return;}const total=cart.reduce((s,i)=>s+i.price*i.quantity,0);document.getElementById("orderSummary").innerHTML=`<div class="order-summary-card"><strong>Order Summary</strong>${cart.map(i=>`<div class="order-line"><span>${i.name} ×${i.quantity}</span><span>₹${(i.price*i.quantity).toLocaleString('en-IN')}</span></div>`).join('')}<div class="order-total"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div></div>`;selectedPaymentMethod=null;document.getElementById('upiInfoBox').classList.remove('show');document.getElementById('codSplitBox').classList.remove('show');document.getElementById('optUPI').classList.remove('selected');document.getElementById('optCOD').classList.remove('selected');document.getElementById('placeOrderBtn').textContent='Select a payment method above';document.getElementById("checkoutModal").style.display="flex";}
-async function placeOrder(){if(!selectedPaymentMethod){showToast("Please select a payment method!");return;}const fullName=document.getElementById("fullName").value.trim(),mobileNumber=document.getElementById("mobileNumber").value.trim(),customerEmail=document.getElementById("customerEmail").value.trim(),deliveryAddress=document.getElementById("deliveryAddress").value.trim(),city=document.getElementById("city").value.trim(),pinCode=document.getElementById("pinCode").value.trim(),state=document.getElementById("state").value.trim();if(!fullName||!mobileNumber||mobileNumber.length<10||!deliveryAddress){showToast("Please fill all required fields");return;}const total=cart.reduce((s,i)=>s+i.price*i.quantity,0),advance=Math.ceil(total/2),orderId="CLOTH"+Date.now()+Math.floor(Math.random()*10000);const itemsList=cart.map(i=>`${i.name} x${i.quantity} = ₹${i.price*i.quantity}`).join('\n');const paymentNote=selectedPaymentMethod==='upi'?`Payment: Full UPI ₹${total}\nUPI ID: ${UPI_ID}`:`Payment: 50% Advance (₹${advance}) UPI + 50% COD (₹${total-advance})\nUPI ID: ${UPI_ID}`;const btn=document.getElementById("placeOrderBtn");btn.innerHTML='⏳ Placing your order...';btn.disabled=true;try{await emailjs.send("service_ofam3d9","template_z2477uv",{fullName,mobileNumber,customerEmail:customerEmail||"Not provided",deliveryAddress,city,pinCode,state,message:`New Order!\nID: ${orderId}\n${itemsList}\nTotal: ₹${total}\n${paymentNote}`,order_id:orderId,total_amount:`₹${total}`});document.getElementById("checkoutModal").style.display="none";document.getElementById("successOrderId").innerHTML=`<strong>Order ID: ${orderId}</strong><br><br><strong>Name:</strong> ${fullName}<br><strong>Mobile:</strong> ${mobileNumber}<br><strong>Address:</strong> ${deliveryAddress}, ${city} - ${pinCode}${state?', '+state:''}<br><br>📧 Confirmation sent!`;document.getElementById("orderSuccessModal").style.display="flex";cart=[];saveCart();}catch(e){showToast("Failed to place order. Please try again.");}finally{btn.innerHTML=selectedPaymentMethod==='upi'?'✅ Place Order (UPI Full Payment)':'✅ Confirm Order (50% Advance + COD)';btn.disabled=false;}}
-function displayProducts(category=currentDisplayCategory){const filtered=products.filter(p=>p.category===category);const grid=document.getElementById("productGrid");if(!grid)return;const t=document.getElementById("categoryTitle");if(category==='gym')t.textContent='🔥 GYM First Choice Collection';else if(category==='bull')t.textContent='🐂 BULL PRINT Collection';else t.textContent='✨ Extra Premium Collection';grid.innerHTML=filtered.map(p=>`<div class="product-card"><div class="product-image-container"><span class="product-badge">${p.discount}</span><img src="${p.image}" class="product-image" onclick="showProductDetail(${p.id})"></div><div class="product-info"><div class="product-brand">${p.brand}</div><div class="product-title">${p.name}</div><div class="price-container"><span class="current-price">₹${p.price}</span><span class="original-price">₹${p.originalPrice}</span><span class="discount">${p.discount}</span></div><button class="add-to-cart" onclick="addToCart(${p.id})">Add to Bag</button></div></div>`).join('');document.querySelectorAll('.category-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===category));document.getElementById('sliderSection').classList.toggle('hide',category!=='gym');}
-function loadSlider(){const t=document.getElementById('gymSliderTrack');if(t)t.innerHTML=products.filter(p=>p.category==='gym').map(p=>`<div class="slider-item" onclick="showProductDetail(${p.id})"><img src="${p.image}" alt="${p.name}"></div>`).join('');}
-function setupSlider(){const track=document.getElementById('gymSliderTrack');document.getElementById('gymSliderLeft').onclick=()=>track.scrollBy({left:-track.offsetWidth,behavior:'smooth'});document.getElementById('gymSliderRight').onclick=()=>track.scrollBy({left:track.offsetWidth,behavior:'smooth'});}
-window.showProductDetail=function(pid){currentProduct=products.find(p=>p.id===pid);if(!currentProduct)return;selectedSize=currentProduct.sizes?.[1]||"M";productQuantity=1;document.getElementById("productDetailContainer").innerHTML=`<div><button class="back-home-btn" onclick="goBackToHome()">← Back to Collection</button></div><div class="product-detail-main"><div class="main-image-container"><img src="${currentProduct.image}" class="main-image"></div><div><div class="detail-brand">${currentProduct.brand}</div><h1 class="detail-title">${currentProduct.name}</h1><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;"><span class="detail-price">₹${currentProduct.price}</span><span class="detail-original">₹${currentProduct.originalPrice}</span><span class="detail-discount">${currentProduct.discount}</span></div><div class="size-label">Select Size</div><div class="size-options">${(currentProduct.sizes||["S","M","L","XL"]).map(s=>`<button class="size-btn ${selectedSize===s?'selected':''}" onclick="selectSize('${s}',this)">${s}</button>`).join('')}</div><div class="quantity-label">Quantity</div><div class="quantity-selector"><button class="quantity-btn" onclick="changeQuantity(-1)">−</button><span class="qty-display" id="qtyVal">1</span><button class="quantity-btn" onclick="changeQuantity(1)">+</button></div><div class="action-buttons"><button class="btn-add-cart" onclick="addToCartFromDetail()">Add to Bag</button><button class="btn-buy-now" id="detailBuyNowBtn" onclick="startBuyNowFlow(currentProduct,productQuantity)">⚡ Buy Now</button></div></div></div>`;document.getElementById("mainContent").style.display="none";document.getElementById("productDetailPage").style.display="block";window.scrollTo(0,0);};
+
+function openCheckout(){
+    if(!cart.length){showToast("Your bag is empty!");return;}
+    const total=cart.reduce((s,i)=>s+i.price*i.quantity,0);
+    document.getElementById("orderSummary").innerHTML=`<div class="order-summary-card"><strong>Order Summary</strong>${cart.map(i=>`<div class="order-line"><span>${i.name} ×${i.quantity}</span><span>₹${(i.price*i.quantity).toLocaleString('en-IN')}</span></div>`).join('')}<div class="order-total"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div></div>`;
+    selectedPaymentMethod=null;
+    document.getElementById('upiInfoBox').classList.remove('show');
+    document.getElementById('codSplitBox').classList.remove('show');
+    document.getElementById('optUPI').classList.remove('selected');
+    document.getElementById('optCOD').classList.remove('selected');
+    document.getElementById('placeOrderBtn').textContent='Select a payment method above';
+    document.getElementById("checkoutModal").style.display="flex";
+}
+
+async function placeOrder(){
+    if(!selectedPaymentMethod){showToast("Please select a payment method!");return;}
+    const fullName=document.getElementById("fullName").value.trim(),mobileNumber=document.getElementById("mobileNumber").value.trim(),customerEmail=document.getElementById("customerEmail").value.trim(),deliveryAddress=document.getElementById("deliveryAddress").value.trim(),city=document.getElementById("city").value.trim(),pinCode=document.getElementById("pinCode").value.trim(),state=document.getElementById("state").value.trim();
+    if(!fullName||!mobileNumber||mobileNumber.length<10||!deliveryAddress){showToast("Please fill all required fields");return;}
+    const total=cart.reduce((s,i)=>s+i.price*i.quantity,0),advance=Math.ceil(total/2),orderId="CLOTH"+Date.now()+Math.floor(Math.random()*10000);
+    const itemsList=cart.map(i=>`${i.name} x${i.quantity} = ₹${i.price*i.quantity}`).join('\n');
+    const paymentNote=selectedPaymentMethod==='upi'?`Payment: Full UPI ₹${total}\nUPI ID: ${UPI_ID}`:`Payment: 50% Advance (₹${advance}) UPI + 50% COD (₹${total-advance})\nUPI ID: ${UPI_ID}`;
+    const btn=document.getElementById("placeOrderBtn");
+    btn.innerHTML='⏳ Placing your order...';btn.disabled=true;
+    try{
+        await emailjs.send("service_ofam3d9","template_z2477uv",{fullName,mobileNumber,customerEmail:customerEmail||"Not provided",deliveryAddress,city,pinCode,state,message:`New Order!\nID: ${orderId}\n${itemsList}\nTotal: ₹${total}\n${paymentNote}`,order_id:orderId,total_amount:`₹${total}`});
+        document.getElementById("checkoutModal").style.display="none";
+        document.getElementById("successOrderId").innerHTML=`<strong>Order ID: ${orderId}</strong><br><br><strong>Name:</strong> ${fullName}<br><strong>Mobile:</strong> ${mobileNumber}<br><strong>Address:</strong> ${deliveryAddress}, ${city} - ${pinCode}${state?', '+state:''}<br><br>📧 Confirmation sent!`;
+        document.getElementById("orderSuccessModal").style.display="flex";
+        cart=[];saveCart();
+    }catch(e){showToast("Failed to place order. Please try again.");}
+    finally{btn.innerHTML=selectedPaymentMethod==='upi'?'✅ Place Order (UPI Full Payment)':'✅ Confirm Order (50% Advance + COD)';btn.disabled=false;}
+}
+
+function displayProducts(category=currentDisplayCategory){
+    const filtered=products.filter(p=>p.category===category);
+    const grid=document.getElementById("productGrid");
+    if(!grid)return;
+    const t=document.getElementById("categoryTitle");
+    if(category==='gym')t.textContent='🔥 GYM First Choice Collection';
+    else if(category==='bull')t.textContent='🐂 BULL PRINT Collection';
+    else t.textContent='✨ Extra Premium Collection';
+    grid.innerHTML=filtered.map(p=>`<div class="product-card"><div class="product-image-container"><span class="product-badge">${p.discount}</span><img src="${p.image}" class="product-image" onclick="showProductDetail(${p.id})"></div><div class="product-info"><div class="product-brand">${p.brand}</div><div class="product-title">${p.name}</div><div class="price-container"><span class="current-price">₹${p.price}</span><span class="original-price">₹${p.originalPrice}</span><span class="discount">${p.discount}</span></div><button class="add-to-cart" onclick="addToCart(${p.id})">Add to Bag</button></div></div>`).join('');
+    document.querySelectorAll('.category-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===category));
+    document.getElementById('sliderSection').classList.toggle('hide',category!=='gym');
+}
+
+function loadSlider(){
+    const t=document.getElementById('gymSliderTrack');
+    if(t)t.innerHTML=products.filter(p=>p.category==='gym').map(p=>`<div class="slider-item" onclick="showProductDetail(${p.id})"><img src="${p.image}" alt="${p.name}"></div>`).join('');
+}
+function setupSlider(){
+    const track=document.getElementById('gymSliderTrack');
+    document.getElementById('gymSliderLeft').onclick=()=>track.scrollBy({left:-track.offsetWidth,behavior:'smooth'});
+    document.getElementById('gymSliderRight').onclick=()=>track.scrollBy({left:track.offsetWidth,behavior:'smooth'});
+}
+
+/* ── PRODUCT DETAIL — NEW COMPACT LAYOUT ── */
+window.showProductDetail = function(pid){
+    currentProduct = products.find(p=>p.id===pid);
+    if(!currentProduct) return;
+    selectedSize = currentProduct.sizes?.[1] || "M";
+    productQuantity = 1;
+
+    const sizeButtons = (currentProduct.sizes||["S","M","L","XL"]).map(s=>
+        `<button class="size-btn ${selectedSize===s?'selected':''}" onclick="selectSize('${s}',this)">${s}</button>`
+    ).join('');
+
+    document.getElementById("productDetailContainer").innerHTML = `
+        <button class="back-home-btn" onclick="goBackToHome()">← Back to Collection</button>
+
+        <!-- TOP: image + info side by side -->
+        <div class="product-detail-top">
+            <div class="pd-image-wrap">
+                <img src="${currentProduct.image}" alt="${currentProduct.name}">
+            </div>
+            <div class="pd-info">
+                <div class="detail-brand">${currentProduct.brand}</div>
+                <h1 class="detail-title">${currentProduct.name}</h1>
+                <div class="price-row">
+                    <span class="detail-price">₹${currentProduct.price}</span>
+                    <span class="detail-original">₹${currentProduct.originalPrice}</span>
+                </div>
+                <span class="detail-discount">${currentProduct.discount}</span>
+
+                <span class="size-label">Select Size</span>
+                <div class="size-options">${sizeButtons}</div>
+
+                <span class="quantity-label">Quantity</span>
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="changeQuantity(-1)">−</button>
+                    <span class="qty-display" id="qtyVal">1</span>
+                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-add-cart" onclick="addToCartFromDetail()">Add to Bag</button>
+                    <button class="btn-buy-now" id="detailBuyNowBtn" onclick="startBuyNowFlow(currentProduct,productQuantity)">⚡ Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM: recommended full width -->
+        <div class="recommended-section">
+            <h3 class="rec-title">You May Also Like</h3>
+            <div class="recommended-grid" id="recommendedProducts"></div>
+        </div>
+    `;
+
+    document.getElementById("mainContent").style.display = "none";
+    document.getElementById("productDetailPage").style.display = "block";
+    window.scrollTo(0,0);
+    // setTimeout ensures DOM is fully painted before we inject recommended
+    setTimeout(()=>loadRecommended(currentProduct.category, currentProduct.id), 0);
+};
+
+function loadRecommended(category, currentId){
+    const rec = products.filter(p => p.category === category && p.id !== currentId);
+    const box = document.getElementById("recommendedProducts");
+    if(!box){ return; }
+    if(!rec.length){ box.innerHTML='<p style="color:var(--muted);font-size:13px;">No other products in this category.</p>'; return; }
+    box.innerHTML = rec.map(p=>`
+        <div class="product-card" onclick="showProductDetail(${p.id})" style="cursor:pointer;">
+            <div class="product-image-container">
+                <span class="product-badge">${p.discount}</span>
+                <img src="${p.image}" class="product-image">
+            </div>
+            <div class="product-info">
+                <div class="product-brand">${p.brand}</div>
+                <div class="product-title">${p.name}</div>
+                <div class="price-container">
+                    <span class="current-price">₹${p.price}</span>
+                    <span class="original-price">₹${p.originalPrice}</span>
+                    <span class="discount">${p.discount}</span>
+                </div>
+                <button class="add-to-cart" onclick="event.stopPropagation();addToCart(${p.id})">Add to Bag</button>
+            </div>
+        </div>
+    `).join('');
+}
+
 window.goBackToHome=()=>{document.getElementById("mainContent").style.display="block";document.getElementById("productDetailPage").style.display="none";displayProducts(currentDisplayCategory);window.scrollTo(0,0);};
 window.selectSize=(s,el)=>{selectedSize=s;document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');};
 window.changeQuantity=d=>{productQuantity=Math.max(1,productQuantity+d);const sp=document.getElementById("qtyVal");if(sp)sp.innerText=productQuantity;};
 window.addToCartFromDetail=()=>{const e=cart.find(i=>i.id===currentProduct.id);if(e)e.quantity+=productQuantity;else cart.push({...currentProduct,quantity:productQuantity});saveCart();showToast("Added to bag ✓");};
+
 function toggleCart(){document.getElementById("cartSidebar").classList.toggle("open");document.getElementById("cartOverlay").classList.toggle("active");}
 function closeModals(){["checkoutModal","contactModal","orderSuccessModal"].forEach(id=>document.getElementById(id).style.display="none");}
 function showSearchModal(){document.getElementById("searchModal").classList.toggle("open");if(document.getElementById("searchModal").classList.contains("open"))document.getElementById("searchModalInput").focus();}
-function performSearch(){const q=document.getElementById("searchModalInput").value.toLowerCase();const res=document.getElementById("searchResults");if(!q){res.innerHTML='<div style="padding:14px;color:var(--muted);font-size:13px;">Type to search...</div>';return;}const f=products.filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q));res.innerHTML=f.length?f.map(p=>`<div class="search-result-item" onclick="selectSearchProduct(${p.id})"><img src="${p.image}"><div><div style="color:var(--white);font-size:12px;">${p.name}</div><div style="color:var(--gold);font-weight:600;margin-top:2px;">₹${p.price}</div></div></div>`).join(''):'<div style="padding:14px;color:var(--muted);font-size:13px;">No products found</div>';}
+function performSearch(){
+    const q=document.getElementById("searchModalInput").value.toLowerCase();
+    const res=document.getElementById("searchResults");
+    if(!q){res.innerHTML='<div style="padding:14px;color:var(--muted);font-size:13px;">Type to search...</div>';return;}
+    const f=products.filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q));
+    res.innerHTML=f.length?f.map(p=>`<div class="search-result-item" onclick="selectSearchProduct(${p.id})"><img src="${p.image}"><div><div style="color:var(--white);font-size:12px;">${p.name}</div><div style="color:var(--gold);font-weight:600;margin-top:2px;">₹${p.price}</div></div></div>`).join(''):'<div style="padding:14px;color:var(--muted);font-size:13px;">No products found</div>';
+}
 function selectSearchProduct(id){document.getElementById("searchModal").classList.remove("open");showProductDetail(id);}
 function openMenu(){document.getElementById("sideMenu").classList.add("open");document.getElementById("menuOverlay").classList.add("active");}
 function closeMenu(){document.getElementById("sideMenu").classList.remove("open");document.getElementById("menuOverlay").classList.remove("active");}
 function showHome(){document.getElementById("mainContent").style.display="block";document.getElementById("productDetailPage").style.display="none";displayProducts(currentDisplayCategory);closeMenu();window.scrollTo(0,0);}
 function setCategory(cat){currentDisplayCategory=cat;displayProducts(cat);document.querySelector('.category-buttons-section').scrollIntoView({behavior:'smooth',block:'start'});}
+
 function startBuyNowFlow(product,qty){
-
-
-    let paymentTimer;
-let paymentSeconds = 300;
-let paymentVerified = false;
-
-function startPaymentTimer(){
-
-    clearInterval(paymentTimer);
-
-    paymentSeconds = 300;
-
-    const wrap = document.getElementById("paymentTimerWrap");
-    const text = document.getElementById("paymentTimerText");
-    const fill = document.getElementById("paymentTimerFill");
-
-    wrap.classList.add("show");
-
-    paymentTimer = setInterval(()=>{
-
-        paymentSeconds--;
-
-        const min = String(Math.floor(paymentSeconds/60)).padStart(2,'0');
-        const sec = String(paymentSeconds%60).padStart(2,'0');
-
-        text.textContent = `${min}:${sec}`;
-
-        const percent = (paymentSeconds / 300) * 100;
-
-        fill.style.width = percent + "%";
-
-        if(paymentSeconds <= 0){
-
-            clearInterval(paymentTimer);
-
-            wrap.classList.remove("show");
-
-            showToast("Payment session expired");
-
-        }
-
-    },1000);
-
-}
-    newOrderProduct = product;
-    newOrderQty = qty || 1;
-
-    const loader = document.getElementById('fullScreenLoader');
-
+    newOrderProduct=product;newOrderQty=qty||1;
+    const loader=document.getElementById('fullScreenLoader');
     loader.classList.add('active');
+    setTimeout(()=>{loader.classList.remove('active');document.getElementById('userDetailsModal').classList.add('active');},3000);
+}
 
-    setTimeout(()=>{
+function validateAndContinue(){
+    const name=document.getElementById('ud_name').value.trim(),mobile=document.getElementById('ud_mobile').value.trim(),address=document.getElementById('ud_address').value.trim(),city=document.getElementById('ud_city').value.trim(),pin=document.getElementById('ud_pin').value.trim();
+    if(!name||!mobile||mobile.replace(/\D/g,'').length<10||!address||!city||!pin||pin.length<6){showToast("Please fill all required fields correctly");return;}
+    const btn=document.getElementById('udContinueBtn');
+    btn.disabled=true;btn.innerHTML=`<span class="btn-spinner"></span>Processing...`;
+    setTimeout(()=>{btn.disabled=false;btn.innerHTML=`Continue to Payment <i class="fas fa-arrow-right"></i>`;document.getElementById('userDetailsModal').classList.remove('active');openOrderPayModal();},2000);
+}
 
-        loader.classList.remove('active');
+function openOrderPayModal(){
+    newOpayMethod=null;const p=newOrderProduct,qty=newOrderQty,total=p.price*qty;
+    document.getElementById('opayOrderSummary').innerHTML=`<div class="opay-summary-header">Order Summary</div><div class="opay-line"><span>${p.name} ×${qty}</span><span>₹${(p.price*qty).toLocaleString('en-IN')}</span></div><div class="opay-line"><span>Size</span><span>${selectedSize}</span></div><div class="opay-line"><span>Shipping</span><span style="color:var(--green);">FREE</span></div><div class="opay-total-row"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div>`;
+    document.getElementById('opayUpiCard').classList.remove('selected');document.getElementById('opayCodCard').classList.remove('selected');document.getElementById('opayUpiBox').classList.remove('show');document.getElementById('opayCodBox').classList.remove('show');
+    const btn=document.getElementById('opayPlaceBtn');btn.textContent='Select a payment method';btn.disabled=true;
+    document.getElementById('orderPayModal').classList.add('active');
+}
 
-        document.getElementById('userDetailsModal')
-            .classList.add('active');
-
-    },3000);
-}function validateAndContinue(){
-
-    const name=document.getElementById('ud_name').value.trim(),
-    mobile=document.getElementById('ud_mobile').value.trim(),
-    address=document.getElementById('ud_address').value.trim(),
-    city=document.getElementById('ud_city').value.trim(),
-    pin=document.getElementById('ud_pin').value.trim();
-
-    if(!name || !mobile || mobile.replace(/\D/g,'').length<10 || !address || !city || !pin || pin.length<6){
-        showToast("Please fill all required fields correctly");
-        return;
-    }
-
-    const btn = document.getElementById('udContinueBtn');
-
-    btn.disabled = true;
-    btn.innerHTML = `
-        <span class="btn-spinner"></span>
-        Processing...
-    `;
-
-    setTimeout(()=>{
-
-        btn.disabled = false;
-        btn.innerHTML = `
-            Continue to Payment 
-            <i class="fas fa-arrow-right"></i>
-        `;
-
-        document.getElementById('userDetailsModal')
-            .classList.remove('active');
-
-        openOrderPayModal();
-
-    },2000);
-}function openOrderPayModal(){newOpayMethod=null;const p=newOrderProduct,qty=newOrderQty,total=p.price*qty;document.getElementById('opayOrderSummary').innerHTML=`<div class="opay-summary-header">Order Summary</div><div class="opay-line"><span>${p.name} ×${qty}</span><span>₹${(p.price*qty).toLocaleString('en-IN')}</span></div><div class="opay-line"><span>Size</span><span>${selectedSize}</span></div><div class="opay-line"><span>Shipping</span><span style="color:var(--green);">FREE</span></div><div class="opay-total-row"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div>`;document.getElementById('opayUpiCard').classList.remove('selected');document.getElementById('opayCodCard').classList.remove('selected');document.getElementById('opayUpiBox').classList.remove('show');document.getElementById('opayCodBox').classList.remove('show');const btn=document.getElementById('opayPlaceBtn');btn.textContent='Select a payment method';btn.disabled=true;document.getElementById('orderPayModal').classList.add('active');}
 window.selectOpayMethod=function(method){
-
     newOpayMethod=method;
-
-    const total=newOrderProduct.price*newOrderQty;
-    const advance=Math.ceil(total/2);
-
-    document.getElementById('opayUpiCard')
-        .classList.toggle('selected',method==='upi');
-
-    document.getElementById('opayCodCard')
-        .classList.toggle('selected',method==='cod');
-
-    const payAmount = method==='upi' ? total : advance;
-    const codAmount = method==='upi' ? 0 : total-advance;
-
-    const upiLink =
-`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${payAmount}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`;
-
-    const html=`
-
-        <div class="opay-split-rows">
-
-            <div class="opay-split-r">
-                <span class="opay-split-label">Order Total</span>
-                <span class="opay-split-val">
-                    ₹${total.toLocaleString('en-IN')}
-                </span>
-            </div>
-
-            <div class="opay-split-r">
-                <span class="opay-split-label">
-                    💚 Pay Now via UPI ${
-                        method==='upi' ? '(100%)' : '(50%)'
-                    }
-                </span>
-
-                <span class="opay-split-val" style="color:var(--gold)">
-                    ₹${payAmount.toLocaleString('en-IN')}
-                </span>
-            </div>
-
-            <div class="opay-split-r">
-                <span class="opay-split-label">
-                    🚚 Pay on Delivery
-                </span>
-
-                <span class="opay-split-val">
-                    ₹${codAmount.toLocaleString('en-IN')}
-                </span>
-            </div>
-
-            <div class="opay-split-r">
-                <span class="opay-split-label" style="color:var(--gold)">
-                    Total
-                </span>
-
-                <span class="opay-split-val" style="color:var(--gold)">
-                    ₹${total.toLocaleString('en-IN')}
-                </span>
-            </div>
-
-        </div>
-
-        <button
-            class="opay-open-upi-btn"
-            style="margin-top:16px;width:100%;"
-            onclick="window.location.href='${upiLink}'">
-
-            💳 Pay Now ₹${payAmount.toLocaleString('en-IN')}
-
-        </button>
-    `;
-
-    if(method==='upi'){
-
-        document.getElementById('opayUpiBox').innerHTML=html;
-
-        document.getElementById('opayUpiBox')
-            .classList.add('show');
-
-        document.getElementById('opayCodBox')
-            .classList.remove('show');
-
-        document.getElementById('opayPlaceBtn')
-            .textContent='✅ Place Order — Full Payment';
-
-    }else{
-
-        document.getElementById('opayCodBox').innerHTML=html;
-
-        document.getElementById('opayCodBox')
-            .classList.add('show');
-
-        document.getElementById('opayUpiBox')
-            .classList.remove('show');
-
-        document.getElementById('opayPlaceBtn')
-            .textContent='✅ Confirm Order — 50% Advance';
-    }
-
+    const total=newOrderProduct.price*newOrderQty,advance=Math.ceil(total/2);
+    document.getElementById('opayUpiCard').classList.toggle('selected',method==='upi');
+    document.getElementById('opayCodCard').classList.toggle('selected',method==='cod');
+    const payAmount=method==='upi'?total:advance,codAmount=method==='upi'?0:total-advance;
+    const upiLink=`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${payAmount}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`;
+    const html=`<div class="opay-split-rows"><div class="opay-split-r"><span class="opay-split-label">Order Total</span><span class="opay-split-val">₹${total.toLocaleString('en-IN')}</span></div><div class="opay-split-r"><span class="opay-split-label">💚 Pay Now via UPI ${method==='upi'?'(100%)':'(50%)'}</span><span class="opay-split-val" style="color:var(--gold)">₹${payAmount.toLocaleString('en-IN')}</span></div><div class="opay-split-r"><span class="opay-split-label">🚚 Pay on Delivery</span><span class="opay-split-val">₹${codAmount.toLocaleString('en-IN')}</span></div><div class="opay-split-r"><span class="opay-split-label" style="color:var(--gold)">Total</span><span class="opay-split-val" style="color:var(--gold)">₹${total.toLocaleString('en-IN')}</span></div></div><button class="opay-open-upi-btn" style="margin-top:16px;width:100%;" onclick="window.location.href='${upiLink}'">💳 Pay Now ₹${payAmount.toLocaleString('en-IN')}</button>`;
+    if(method==='upi'){document.getElementById('opayUpiBox').innerHTML=html;document.getElementById('opayUpiBox').classList.add('show');document.getElementById('opayCodBox').classList.remove('show');document.getElementById('opayPlaceBtn').textContent='✅ Place Order — Full Payment';}
+    else{document.getElementById('opayCodBox').innerHTML=html;document.getElementById('opayCodBox').classList.add('show');document.getElementById('opayUpiBox').classList.remove('show');document.getElementById('opayPlaceBtn').textContent='✅ Confirm Order — 50% Advance';}
     document.getElementById('opayPlaceBtn').disabled=false;
 };
-
-
 window.openOpayUPI=function(){const total=newOrderProduct.price*newOrderQty;window.location.href=`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`;};
 window.openOpayCODUPI=function(){const total=newOrderProduct.price*newOrderQty,advance=Math.ceil(total/2);window.location.href=`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${advance}&cu=INR&tn=${encodeURIComponent('Clothing India Advance 50%')}`;};
 window.copyUpiId=function(){navigator.clipboard.writeText(UPI_ID).then(()=>showToast("UPI ID copied ✓")).catch(()=>showToast(UPI_ID));};
-window.placeNewOrder=async function(){if(!newOpayMethod){showToast("Please select a payment method!");return;}const name=document.getElementById('ud_name').value.trim(),mobile=document.getElementById('ud_mobile').value.trim(),email=document.getElementById('ud_email').value.trim(),address=document.getElementById('ud_address').value.trim(),city=document.getElementById('ud_city').value.trim(),pin=document.getElementById('ud_pin').value.trim(),state=document.getElementById('ud_state').value.trim();const p=newOrderProduct,qty=newOrderQty,total=p.price*qty,advance=Math.ceil(total/2),orderId="CLOTH"+Date.now()+Math.floor(Math.random()*10000),payNote=newOpayMethod==='upi'?`Payment: Full UPI ₹${total}`:`Payment: 50% Advance (₹${advance}) UPI + 50% COD (₹${total-advance})`;const btn=document.getElementById('opayPlaceBtn');btn.innerHTML='<span class="btn-spinner"></span> Placing order...';btn.disabled=true;try{await emailjs.send("service_ofam3d9","template_z2477uv",{fullName:name,mobileNumber:mobile,customerEmail:email||"Not provided",deliveryAddress:address,city,pinCode:pin,state,message:`🛍️ Buy Now Order!\nID: ${orderId}\n${p.name} x${qty} (Size: ${selectedSize}) = ₹${total}\n${payNote}\nUPI ID: ${UPI_ID}`,order_id:orderId,total_amount:`₹${total}`});document.getElementById('orderPayModal').classList.remove('active');document.getElementById('nsuccessDetails').innerHTML=`<div class="nsuccess-detail-row"><span>Order ID</span><span>${orderId}</span></div><div class="nsuccess-detail-row"><span>Name</span><span>${name}</span></div><div class="nsuccess-detail-row"><span>Mobile</span><span>${mobile}</span></div><div class="nsuccess-detail-row"><span>Delivery</span><span>${city} - ${pin}</span></div><div class="nsuccess-detail-row"><span>Product</span><span>${p.name}</span></div><div class="nsuccess-detail-row"><span>Size</span><span>${selectedSize}</span></div>`;document.getElementById('newSuccessModal').classList.add('active');newOrderProduct=null;}catch(err){showToast("Failed to place order. Please try again.");btn.innerHTML=newOpayMethod==='upi'?'✅ Place Order — UPI Full Payment':'✅ Confirm Order (50% Advance + COD)';btn.disabled=false;}};
-document.addEventListener("DOMContentLoaded",()=>{loadCart();displayProducts('gym');loadSlider();setupSlider();document.querySelectorAll('.category-btn').forEach(b=>b.onclick=()=>setCategory(b.dataset.cat));document.getElementById("homeLink").onclick=showHome;document.getElementById("searchIconBtn").onclick=showSearchModal;document.getElementById("searchModalInput").oninput=performSearch;document.getElementById("cartIconBtn").onclick=toggleCart;document.getElementById("closeCart").onclick=toggleCart;document.getElementById("cartOverlay").onclick=toggleCart;document.getElementById("checkoutBtn").onclick=openCheckout;document.getElementById("hamburgerBtn").onclick=openMenu;document.getElementById("closeMenuBtn").onclick=closeMenu;document.getElementById("menuOverlay").onclick=closeMenu;document.getElementById("menuMainPage").onclick=showHome;document.getElementById("menuContactHelp").onclick=()=>{document.getElementById("contactModal").style.display="flex";closeMenu();};document.getElementById("closeSuccessBtn").onclick=()=>{document.getElementById("orderSuccessModal").style.display="none";showHome();};document.querySelectorAll(".close-modal").forEach(b=>b.onclick=closeModals);document.getElementById("closeContactBtn").onclick=()=>document.getElementById("contactModal").style.display="none";document.getElementById("placeOrderBtn").onclick=placeOrder;document.getElementById("udContinueBtn").onclick=validateAndContinue;document.getElementById("nsuccessShopBtn").onclick=()=>{document.getElementById('newSuccessModal').classList.remove('active');showHome();};document.getElementById("userDetailsModal").addEventListener('click',e=>{if(e.target===document.getElementById("userDetailsModal"))document.getElementById("userDetailsModal").classList.remove('active');});document.getElementById("orderPayModal").addEventListener('click',e=>{if(e.target===document.getElementById("orderPayModal"))document.getElementById("orderPayModal").classList.remove('active');});window.onclick=e=>{if(e.target.classList.contains('modal'))closeModals();if(!e.target.closest('.search-modal')&&!e.target.closest('#searchIconBtn'))document.getElementById("searchModal").classList.remove("open");};});
 
-/* =========================
-   MOBILE + DESKTOP BACK FIX
-========================= */
-
-history.replaceState({page:"home"}, "");
-
-// Product page
-const oldShowProductDetail = window.showProductDetail;
-
-window.showProductDetail = function(pid){
-    history.pushState({page:"product"}, "");
-    oldShowProductDetail(pid);
+window.placeNewOrder=async function(){
+    if(!newOpayMethod){showToast("Please select a payment method!");return;}
+    const name=document.getElementById('ud_name').value.trim(),mobile=document.getElementById('ud_mobile').value.trim(),email=document.getElementById('ud_email').value.trim(),address=document.getElementById('ud_address').value.trim(),city=document.getElementById('ud_city').value.trim(),pin=document.getElementById('ud_pin').value.trim(),state=document.getElementById('ud_state').value.trim();
+    const p=newOrderProduct,qty=newOrderQty,total=p.price*qty,advance=Math.ceil(total/2),orderId="CLOTH"+Date.now()+Math.floor(Math.random()*10000),payNote=newOpayMethod==='upi'?`Payment: Full UPI ₹${total}`:`Payment: 50% Advance (₹${advance}) UPI + 50% COD (₹${total-advance})`;
+    const btn=document.getElementById('opayPlaceBtn');btn.innerHTML='<span class="btn-spinner"></span> Placing order...';btn.disabled=true;
+    try{
+        await emailjs.send("service_ofam3d9","template_z2477uv",{fullName:name,mobileNumber:mobile,customerEmail:email||"Not provided",deliveryAddress:address,city,pinCode:pin,state,message:`🛍️ Buy Now Order!\nID: ${orderId}\n${p.name} x${qty} (Size: ${selectedSize}) = ₹${total}\n${payNote}\nUPI ID: ${UPI_ID}`,order_id:orderId,total_amount:`₹${total}`});
+        document.getElementById('orderPayModal').classList.remove('active');
+        document.getElementById('nsuccessDetails').innerHTML=`<div class="nsuccess-detail-row"><span>Order ID</span><span>${orderId}</span></div><div class="nsuccess-detail-row"><span>Name</span><span>${name}</span></div><div class="nsuccess-detail-row"><span>Mobile</span><span>${mobile}</span></div><div class="nsuccess-detail-row"><span>Delivery</span><span>${city} - ${pin}</span></div><div class="nsuccess-detail-row"><span>Product</span><span>${p.name}</span></div><div class="nsuccess-detail-row"><span>Size</span><span>${selectedSize}</span></div>`;
+        document.getElementById('newSuccessModal').classList.add('active');newOrderProduct=null;
+    }catch(err){showToast("Failed to place order. Please try again.");btn.innerHTML=newOpayMethod==='upi'?'✅ Place Order — UPI Full Payment':'✅ Confirm Order (50% Advance + COD)';btn.disabled=false;}
 };
 
-// Cart
-const oldToggleCart = toggleCart;
-
-toggleCart = function(){
-
-    const cartOpen = document
-        .getElementById("cartSidebar")
-        .classList.contains("open");
-
-    if(!cartOpen){
-        history.pushState({page:"cart"}, "");
-    }
-
-    oldToggleCart();
-};
-
-// Menu
-const oldOpenMenu = openMenu;
-
-openMenu = function(){
-    history.pushState({page:"menu"}, "");
-    oldOpenMenu();
-};
-
-// Search
-const oldShowSearchModal = showSearchModal;
-
-showSearchModal = function(){
-
-    const isOpen = document
-        .getElementById("searchModal")
-        .classList.contains("open");
-
-    if(!isOpen){
-        history.pushState({page:"search"}, "");
-    }
-
-    oldShowSearchModal();
-};
-
-// Buy now modal history
-const oldStartBuyNowFlow = startBuyNowFlow;
-
-startBuyNowFlow = function(product, qty){
-    history.pushState({page:"buyNow"}, "");
-    oldStartBuyNowFlow(product, qty);
-};
-
-
-// BACK BUTTON
-window.addEventListener("popstate", function(){
-
-    // Search close
-    if(document.getElementById("searchModal")
-        .classList.contains("open")){
-
-        document.getElementById("searchModal")
-            .classList.remove("open");
-
-        return;
-    }
-
-    // Cart close
-    if(document.getElementById("cartSidebar")
-        .classList.contains("open")){
-
-        document.getElementById("cartSidebar")
-            .classList.remove("open");
-
-        document.getElementById("cartOverlay")
-            .classList.remove("active");
-
-        return;
-    }
-
-    // Menu close
-    if(document.getElementById("sideMenu")
-        .classList.contains("open")){
-
-        closeMenu();
-        return;
-    }
-
-    // Product detail back
-    if(document.getElementById("productDetailPage")
-        .style.display === "block"){
-
-        goBackToHome();
-        return;
-    }
-
-    // User detail modal close
-    if(document.getElementById("userDetailsModal")
-        .classList.contains("active")){
-
-        document.getElementById("userDetailsModal")
-            .classList.remove("active");
-
-        return;
-    }
-
-    // Payment modal close
-    if(document.getElementById("orderPayModal")
-        .classList.contains("active")){
-
-        document.getElementById("orderPayModal")
-            .classList.remove("active");
-
-        return;
-    }
-
-    // Success modal close
-    if(document.getElementById("newSuccessModal")
-        .classList.contains("active")){
-
-        document.getElementById("newSuccessModal")
-            .classList.remove("active");
-
-        showHome();
-
-        return;
-    }
-
+document.addEventListener("DOMContentLoaded",()=>{
+    loadCart();displayProducts('gym');loadSlider();setupSlider();
+    document.querySelectorAll('.category-btn').forEach(b=>b.onclick=()=>setCategory(b.dataset.cat));
+    document.getElementById("homeLink").onclick=showHome;
+    document.getElementById("searchIconBtn").onclick=showSearchModal;
+    document.getElementById("searchModalInput").oninput=performSearch;
+    document.getElementById("cartIconBtn").onclick=toggleCart;
+    document.getElementById("closeCart").onclick=toggleCart;
+    document.getElementById("cartOverlay").onclick=toggleCart;
+    document.getElementById("checkoutBtn").onclick=openCheckout;
+    document.getElementById("hamburgerBtn").onclick=openMenu;
+    document.getElementById("closeMenuBtn").onclick=closeMenu;
+    document.getElementById("menuOverlay").onclick=closeMenu;
+    document.getElementById("menuMainPage").onclick=showHome;
+    document.getElementById("menuContactHelp").onclick=()=>{document.getElementById("contactModal").style.display="flex";closeMenu();};
+    document.getElementById("closeSuccessBtn").onclick=()=>{document.getElementById("orderSuccessModal").style.display="none";showHome();};
+    document.querySelectorAll(".close-modal").forEach(b=>b.onclick=closeModals);
+    document.getElementById("closeContactBtn").onclick=()=>document.getElementById("contactModal").style.display="none";
+    document.getElementById("placeOrderBtn").onclick=placeOrder;
+    document.getElementById("udContinueBtn").onclick=validateAndContinue;
+    document.getElementById("nsuccessShopBtn").onclick=()=>{document.getElementById('newSuccessModal').classList.remove('active');showHome();};
+    document.getElementById("userDetailsModal").addEventListener('click',e=>{if(e.target===document.getElementById("userDetailsModal"))document.getElementById("userDetailsModal").classList.remove('active');});
+    document.getElementById("orderPayModal").addEventListener('click',e=>{if(e.target===document.getElementById("orderPayModal"))document.getElementById("orderPayModal").classList.remove('active');});
+    window.onclick=e=>{if(e.target.classList.contains('modal'))closeModals();if(!e.target.closest('.search-modal')&&!e.target.closest('#searchIconBtn'))document.getElementById("searchModal").classList.remove("open");};
 });
 
+/* BACK BUTTON FIX */
+history.replaceState({page:"home"}, "");
+const oldShowProductDetail = window.showProductDetail;
+window.showProductDetail = function(pid){ history.pushState({page:"product"}, ""); oldShowProductDetail(pid); };
+const oldToggleCart = toggleCart;
+toggleCart = function(){ const cartOpen=document.getElementById("cartSidebar").classList.contains("open"); if(!cartOpen){history.pushState({page:"cart"},"");} oldToggleCart(); };
+const oldOpenMenu = openMenu;
+openMenu = function(){ history.pushState({page:"menu"},""); oldOpenMenu(); };
+const oldShowSearchModal = showSearchModal;
+showSearchModal = function(){ const isOpen=document.getElementById("searchModal").classList.contains("open"); if(!isOpen){history.pushState({page:"search"},"");} oldShowSearchModal(); };
+const oldStartBuyNowFlow = startBuyNowFlow;
+startBuyNowFlow = function(product,qty){ history.pushState({page:"buyNow"},""); oldStartBuyNowFlow(product,qty); };
+window.addEventListener("popstate",function(){
+    if(document.getElementById("searchModal").classList.contains("open")){document.getElementById("searchModal").classList.remove("open");return;}
+    if(document.getElementById("cartSidebar").classList.contains("open")){document.getElementById("cartSidebar").classList.remove("open");document.getElementById("cartOverlay").classList.remove("active");return;}
+    if(document.getElementById("sideMenu").classList.contains("open")){closeMenu();return;}
+    if(document.getElementById("productDetailPage").style.display==="block"){goBackToHome();return;}
+    if(document.getElementById("userDetailsModal").classList.contains("active")){document.getElementById("userDetailsModal").classList.remove("active");return;}
+    if(document.getElementById("orderPayModal").classList.contains("active")){document.getElementById("orderPayModal").classList.remove("active");return;}
+    if(document.getElementById("newSuccessModal").classList.contains("active")){document.getElementById("newSuccessModal").classList.remove("active");showHome();return;}
+});
 </script>
 </body>
 </html>
