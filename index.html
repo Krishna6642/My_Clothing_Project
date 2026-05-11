@@ -11,561 +11,346 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         :root {
-            --black: #0a0a0a;
-            --dark: #111111;
-            --card: #161616;
-            --border: rgba(255,255,255,0.06);
-            --gold: #c9a84c;
-            --gold-light: #e8c87a;
-            --gold-dim: rgba(201,168,76,0.12);
-            --white: #f5f0e8;
-            --muted: #7a7a7a;
-            --text: #e8e0d0;
-            --accent: #c9a84c;
+            --black: #0a0a0a; --dark: #111111; --card: #161616;
+            --border: rgba(255,255,255,0.06); --gold: #c9a84c;
+            --gold-light: #e8c87a; --gold-dim: rgba(201,168,76,0.12);
+            --white: #f5f0e8; --muted: #7a7a7a; --text: #e8e0d0;
+            --green: #4ade80; --green-dim: rgba(74,222,128,0.1);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background-color: var(--black);
-            color: var(--text);
-            min-height: 100vh;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.4;
-        }
-        .header {
-            background: linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(10,10,10,0.95) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
-        }
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 24px;
-            height: 68px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-        }
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--white);
-            text-decoration: none;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-        .logo-sub {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 8px;
-            font-weight: 400;
-            letter-spacing: 4px;
-            color: var(--gold);
-            text-transform: uppercase;
-            margin-top: 3px;
-        }
-        .right-section { display: flex; align-items: center; gap: 6px; }
-        .icon-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            color: var(--muted);
-            font-size: 14px;
-            transition: all 0.3s;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .icon-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-        .cart-link {
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--gold);
-            padding: 0 18px;
-            height: 40px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            position: relative;
-            transition: all 0.3s;
-            color: var(--black);
-        }
-        .cart-link:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
-        .cart-count {
-            position: absolute;
-            top: -6px; right: -6px;
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 5px;
-            font-size: 9px;
-            min-width: 18px;
-            text-align: center;
-            font-weight: 700;
-        }
-        .search-modal {
-            position: absolute;
-            top: 74px; right: 24px;
-            width: 90%; max-width: 360px;
-            background: var(--card);
-            border-radius: 16px;
-            z-index: 1002;
-            display: none;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-        .search-modal.open { display: block; animation: slideDown 0.2s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-        .search-modal input {
-            width: 100%;
-            padding: 16px 20px;
-            border: none;
-            outline: none;
-            background: transparent;
-            color: var(--white);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            border-bottom: 1px solid var(--border);
-        }
-        .search-modal input::placeholder { color: var(--muted); }
-        .search-results { max-height: 280px; overflow-y: auto; }
-        .search-result-item {
-            padding: 12px 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
-        }
-        .search-result-item:hover { background: rgba(255,255,255,0.03); }
-        .search-result-item img { width: 42px; height: 42px; object-fit: cover; border-radius: 8px; }
-        .search-result-item div { font-size: 12px; }
-        .search-result-item div div:last-child { color: var(--gold); font-weight: 600; margin-top: 2px; }
-        .side-menu {
-            position: fixed;
-            left: -300px; top: 0;
-            width: 300px; height: 100%;
-            background: var(--dark);
-            z-index: 1100;
-            transition: left 0.35s cubic-bezier(0.4,0,0.2,1);
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid var(--border);
-        }
-        .side-menu.open { left: 0; }
-        .side-menu-header { padding: 24px 24px 20px; border-bottom: 1px solid var(--border); }
-        .side-menu-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            color: var(--white);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .close-menu {
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 16px;
-            cursor: pointer;
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            transition: all 0.2s;
-        }
-        .close-menu:hover { border-color: var(--gold); color: var(--gold); }
-        .side-menu-links { flex: 1; padding: 20px 0; }
-        .side-menu-link {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 24px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--muted);
-            transition: all 0.2s;
-            border-left: 2px solid transparent;
-        }
-        .side-menu-link:hover { color: var(--gold); border-left-color: var(--gold); background: var(--gold-dim); }
-        .side-menu-link i { width: 18px; }
-        .menu-overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1099;
-            display: none;
-            backdrop-filter: blur(4px);
-        }
-        .menu-overlay.active { display: block; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
-        .hero-banner {
-            margin: 24px 0;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #0d0d0d 0%, #1a1408 50%, #0d0d0d 100%);
-            border: 1px solid rgba(201,168,76,0.15);
-            padding: 48px 40px;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: -60px; left: 50%;
-            transform: translateX(-50%);
-            width: 400px; height: 200px;
-            background: radial-gradient(ellipse, rgba(201,168,76,0.15) 0%, transparent 70%);
-        }
-        .hero-eyebrow {
-            font-size: 9px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: block;
-        }
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(28px, 5vw, 52px);
-            font-weight: 900;
-            color: var(--white);
-            line-height: 1.1;
-            margin-bottom: 12px;
-        }
-        .hero-title em { font-style: italic; color: var(--gold); }
-        .hero-sub { font-size: 13px; color: var(--muted); letter-spacing: 0.5px; }
-        .hero-divider { width: 40px; height: 1px; background: var(--gold); margin: 16px auto; opacity: 0.6; }
-        .hero-badges { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
-        .hero-badge {
-            font-size: 11px;
-            color: var(--gold);
-            background: rgba(201,168,76,0.1);
-            border: 1px solid rgba(201,168,76,0.25);
-            padding: 6px 16px;
-            border-radius: 50px;
-            letter-spacing: 0.5px;
-        }
-        
-        /* SLIDER SECTION - Only visible for GYM category */
-        .slider-section { 
-            margin-bottom: 32px;
-            display: block;
-        }
-        .slider-section.hide {
-            display: none;
-        }
-        .slider-wrapper {
-            width: 100%;
-            max-width: 520px;
-            margin: 0 auto;
-            position: relative;
-            border-radius: 20px;
-            border: 1px solid rgba(201,168,76,0.15);
-            overflow: hidden;
-            box-shadow: 0 24px 80px rgba(0,0,0,0.5);
-        }
-        .slider-container { width: 100%; position: relative; }
-        .slider-track { display: flex; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
-        .slider-track::-webkit-scrollbar { display: none; }
-        .slider-item { flex: 0 0 100%; width: 100%; cursor: pointer; display: block; }
-        .slider-item img { width: 100%; height: auto; display: block; }
-        .slider-btn {
-            position: absolute;
-            background: rgba(0,0,0,0.7);
-            border: 1px solid rgba(201,168,76,0.3);
-            color: var(--gold);
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            top: 50%; transform: translateY(-50%);
-            z-index: 10;
-            font-size: 13px;
-            transition: all 0.2s;
-            backdrop-filter: blur(8px);
-        }
-        .slider-btn:hover { background: var(--gold); color: var(--black); }
-        .slider-btn-left { left: 12px; }
-        .slider-btn-right { right: 12px; }
-        
-        .category-buttons-section { margin-bottom: 32px; }
-        .section-label {
-            font-size: 9px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: block;
-        }
-        .category-buttons-grid { display: flex; gap: 12px; flex-wrap: wrap; }
-        .category-btn {
-            flex: 1;
-            min-width: 100px;
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px 16px;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
-            position: relative;
-            overflow: hidden;
-        }
-        .category-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 100%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .category-btn:hover::before { opacity: 1; }
-        .category-btn:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(201,168,76,0.12); }
-        .category-btn.active { border-color: var(--gold); background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.05) 100%); }
-        .category-btn.active::before { opacity: 1; }
-        .category-btn-icon { font-size: 28px; margin-bottom: 10px; display: block; }
-        .category-btn-name { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; color: var(--text); }
-        .category-btn.active .category-btn-name { color: var(--gold); }
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--white);
-            margin: 0 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(201,168,76,0.4) 0%, transparent 100%); }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 40px; }
-        .product-card {
-            background: var(--card);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
-        }
-        .product-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-        .product-image-container { position: relative; width: 100%; padding-top: 85%; overflow: hidden; background: #111; }
-        .product-badge {
-            position: absolute;
-            top: 10px; left: 10px;
-            z-index: 2;
-            background: var(--gold);
-            color: var(--black);
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            padding: 4px 10px;
-            border-radius: 50px;
-        }
-        .product-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; cursor: pointer; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
-        .product-card:hover .product-image { transform: scale(1.06); }
-        .product-info { padding: 14px; }
-        .product-brand { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
-        .product-title { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px; }
-        .price-container { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-        .current-price { font-size: 16px; font-weight: 700; color: var(--gold); }
-        .original-price { font-size: 11px; color: var(--muted); text-decoration: line-through; }
-        .discount { font-size: 9px; color: #4ade80; font-weight: 600; letter-spacing: 0.5px; background: rgba(74,222,128,0.1); padding: 2px 6px; border-radius: 50px; }
-        .add-to-cart {
-            width: 100%;
-            padding: 10px;
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid rgba(201,168,76,0.35);
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-        .add-to-cart:hover { background: var(--gold); color: var(--black); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
-        .cart-sidebar {
-            position: fixed;
-            right: -100%; top: 0;
-            width: 85%; max-width: 400px; height: 100%;
-            background: var(--dark);
-            z-index: 1101;
-            transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
-            display: flex;
-            flex-direction: column;
-            border-left: 1px solid var(--border);
-        }
-        .cart-sidebar.open { right: 0; box-shadow: -20px 0 60px rgba(0,0,0,0.6); }
-        .cart-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .cart-header h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); }
-        .cart-header i { cursor: pointer; color: var(--muted); transition: color 0.2s; font-size: 16px; }
-        .cart-header i:hover { color: var(--gold); }
-        .cart-items { flex: 1; overflow-y: auto; padding: 16px; }
-        .cart-footer { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--dark); }
-        .cart-total { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
-        .cart-total span { color: var(--gold); font-size: 20px; font-weight: 700; }
-        .checkout-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--gold);
-            color: var(--black);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-        .checkout-btn:hover { background: var(--gold-light); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
-        .cart-item { display: flex; gap: 14px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-        .cart-item-image { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
-        .cart-item-details { flex: 1; }
-        .cart-item-brand { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
-        .cart-item-title { font-size: 13px; font-weight: 500; color: var(--white); margin: 3px 0; }
-        .cart-item-price { color: var(--gold); font-weight: 700; font-size: 15px; }
-        .cart-quantity { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-        .cart-quantity button { padding: 3px 9px; background: var(--card); color: var(--white); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-        .cart-quantity button:hover { border-color: var(--gold); color: var(--gold); }
-        .cart-quantity .del-btn { background: rgba(231,76,60,0.1); border-color: rgba(231,76,60,0.3); color: #e74c3c; font-size: 10px; }
-        .cart-quantity .del-btn:hover { background: rgba(231,76,60,0.2); }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 9998; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
-        .modal-content {
-            background: var(--dark);
-            padding: 28px;
-            border-radius: 20px;
-            width: 92%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            border: 1px solid var(--border);
-            box-shadow: 0 40px 120px rgba(0,0,0,0.6);
-            animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
-        }
-        @keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .close-modal { position: absolute; top: 16px; right: 20px; font-size: 20px; cursor: pointer; color: var(--muted); transition: color 0.2s; }
-        .close-modal:hover { color: var(--gold); }
-        .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); margin-bottom: 20px; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1100; display: none; backdrop-filter: blur(4px); }
-        .overlay.active { display: block; }
-        .cod-info { background: rgba(201,168,76,0.08); padding: 14px; border-radius: 12px; margin: 16px 0; border: 1px solid rgba(201,168,76,0.2); font-size: 13px; color: var(--text); }
-        .cod-info strong { color: var(--gold); }
-        .form-group { margin-bottom: 10px; }
-        .form-input { width: 100%; padding: 12px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 13px; transition: border-color 0.2s; outline: none; }
-        .form-input::placeholder { color: var(--muted); }
-        .form-input:focus { border-color: rgba(201,168,76,0.5); }
-        .form-row { display: flex; gap: 10px; }
-        .form-row .form-input { flex: 1; }
-        .pay-btn { width: 100%; padding: 14px; background: var(--gold); color: var(--black); border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; letter-spacing: 0.5px; margin-top: 16px; transition: all 0.3s; }
-        .pay-btn:hover { background: var(--gold-light); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
-        .order-summary-card { background: var(--card); border-radius: 14px; padding: 16px; border: 1px solid var(--border); margin-bottom: 16px; font-size: 13px; }
-        .order-summary-card strong { color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px; }
-        .order-line { display: flex; justify-content: space-between; padding: 4px 0; color: var(--text); border-bottom: 1px solid var(--border); }
-        .order-total { display: flex; justify-content: space-between; padding: 12px 0 0; font-weight: 700; color: var(--gold); font-size: 16px; }
-        .section-form-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 12px; margin-top: 20px; display: block; }
-        .product-detail-container { max-width: 1200px; margin: 0 auto; padding: 16px; }
-        .back-home-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; cursor: pointer; font-size: 12px; font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: all 0.2s; letter-spacing: 0.5px; }
-        .back-home-btn:hover { border-color: var(--gold); color: var(--gold); }
-        .product-detail-main { display: grid; grid-template-columns: 1fr; gap: 28px; background: var(--card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); }
-        @media (min-width: 768px) { .product-detail-main { grid-template-columns: 1fr 1fr; padding: 40px; gap: 48px; } }
-        .main-image-container { position: relative; width: 100%; padding-top: 100%; background: var(--black); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
-        .main-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
-        .detail-brand { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
-        .detail-title { font-family: 'Playfair Display', serif; font-size: clamp(20px, 3vw, 28px); font-weight: 700; color: var(--white); margin-bottom: 16px; line-height: 1.2; }
-        .detail-price { font-size: 28px; font-weight: 700; color: var(--gold); }
-        .detail-original { font-size: 14px; color: var(--muted); text-decoration: line-through; margin-left: 8px; }
-        .detail-discount { font-size: 11px; color: #4ade80; background: rgba(74,222,128,0.1); padding: 3px 10px; border-radius: 50px; font-weight: 600; }
-        .size-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 20px 0 10px; }
-        .size-options { display: flex; gap: 10px; flex-wrap: wrap; }
-        .size-btn { width: 46px; height: 46px; border: 1px solid var(--border); background: var(--card); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text); transition: all 0.2s; }
-        .size-btn:hover { border-color: rgba(201,168,76,0.4); }
-        .size-btn.selected { border-color: var(--gold); background: var(--gold); color: var(--black); }
-        .quantity-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 20px 0 10px; }
-        .quantity-selector { display: flex; align-items: center; gap: 16px; }
-        .quantity-btn { width: 38px; height: 38px; border: 1px solid var(--border); background: var(--card); border-radius: 8px; cursor: pointer; font-size: 18px; color: var(--white); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .quantity-btn:hover { border-color: var(--gold); color: var(--gold); }
-        .qty-display { font-size: 18px; font-weight: 600; min-width: 30px; text-align: center; color: var(--white); }
-        .action-buttons { display: flex; gap: 14px; margin: 28px 0; flex-wrap: wrap; }
-        .btn-add-cart, .btn-buy-now { flex: 1; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s; }
-        .btn-add-cart { background: transparent; color: var(--gold); border: 1px solid rgba(201,168,76,0.4); }
-        .btn-add-cart:hover { background: var(--gold-dim); border-color: var(--gold); }
-        .btn-buy-now { background: var(--gold); color: var(--black); }
-        .btn-buy-now:hover { background: var(--gold-light); box-shadow: 0 8px 24px rgba(201,168,76,0.35); }
-        .related-section { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border); }
-        .related-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--white); margin-bottom: 20px; }
-        .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-        .related-card { background: var(--card); border-radius: 14px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); transition: all 0.3s; }
-        .related-card:hover { transform: translateY(-3px); border-color: rgba(201,168,76,0.3); }
-        .related-img-container { position: relative; width: 100%; padding-top: 100%; background: var(--black); }
-        .related-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
-        .related-info { padding: 10px; }
-        .related-name { font-size: 12px; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .related-price { color: var(--gold); font-weight: 700; font-size: 13px; margin-top: 3px; }
-        .success-icon-wrap { text-align: center; margin-bottom: 16px; }
-        .success-icon-wrap i { font-size: 64px; color: #4ade80; }
-        .success-title { font-family: 'Playfair Display', serif; font-size: 24px; text-align: center; color: var(--white); margin-bottom: 12px; }
-        .success-info { background: var(--card); border-radius: 14px; padding: 16px; font-size: 13px; line-height: 1.7; border: 1px solid var(--border); margin-bottom: 20px; }
-        .footer { background: var(--dark); border-top: 1px solid var(--border); padding: 40px 24px 24px; margin-top: 40px; }
-        .footer-top { max-width: 1200px; margin: 0 auto 32px; text-align: center; }
-        .footer-logo { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); margin-bottom: 6px; }
-        .footer-tagline { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
-        .footer-divider { width: 40px; height: 1px; background: var(--gold); margin: 20px auto; opacity: 0.4; }
-        .footer-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto 24px; }
-        @media (min-width: 600px) { .footer-container { grid-template-columns: repeat(4, 1fr); } }
-        .footer-section h4 { font-size: 9px; margin-bottom: 12px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
-        .footer-section a, .footer-section p { font-size: 12px; color: var(--muted); text-decoration: none; cursor: pointer; display: block; margin-bottom: 7px; transition: color 0.2s; }
-        .footer-section a:hover { color: var(--gold); }
-        .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; text-align: center; font-size: 11px; color: var(--muted); max-width: 1200px; margin: 0 auto; }
-        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--card); color: var(--white); padding: 12px 24px; border-radius: 50px; z-index: 99999; font-size: 13px; font-weight: 500; white-space: nowrap; border: 1px solid var(--border); animation: toastAnim 3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
-        @keyframes toastAnim { 0%{opacity:0;bottom:0} 10%{opacity:1;bottom:24px} 90%{opacity:1;bottom:24px} 100%{opacity:0;bottom:0} }
-        .contact-info-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px; font-size: 13px; color: var(--text); }
-        .contact-info-item i { color: var(--gold); width: 16px; }
-        .close-contact-btn { background: var(--gold); color: var(--black); padding: 10px 24px; border: none; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.5px; margin-top: 12px; transition: all 0.2s; }
-        .close-contact-btn:hover { background: var(--gold-light); }
-        @media (min-width: 768px) {
-            .product-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-            .related-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        }
-        @media (max-width: 480px) { .product-grid { gap: 10px; } .hero-banner { padding: 32px 20px; } }
-    </style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'DM Sans',sans-serif; background:var(--black); color:var(--text); min-height:100vh; }
+        body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.4; }
+
+        /* HEADER */
+        .header { background:linear-gradient(180deg,rgba(0,0,0,0.98),rgba(10,10,10,0.95)); backdrop-filter:blur(20px); position:sticky; top:0; z-index:1000; border-bottom:1px solid var(--border); }
+        .nav-container { max-width:1400px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+        .logo { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); text-decoration:none; cursor:pointer; letter-spacing:0.5px; display:flex; flex-direction:column; line-height:1; }
+        .logo-sub { font-family:'DM Sans',sans-serif; font-size:8px; font-weight:400; letter-spacing:4px; color:var(--gold); text-transform:uppercase; margin-top:3px; }
+        .right-section { display:flex; align-items:center; gap:6px; }
+        .icon-btn { background:transparent; border:1px solid var(--border); cursor:pointer; width:40px; height:40px; border-radius:50%; color:var(--muted); font-size:14px; transition:all 0.3s; display:flex; align-items:center; justify-content:center; }
+        .icon-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+        .cart-link { text-decoration:none; display:flex; align-items:center; gap:8px; background:var(--gold); padding:0 18px; height:40px; border-radius:50px; cursor:pointer; font-size:12px; font-weight:600; letter-spacing:0.5px; position:relative; transition:all 0.3s; color:var(--black); }
+        .cart-link:hover { background:var(--gold-light); transform:translateY(-1px); box-shadow:0 8px 24px rgba(201,168,76,0.3); }
+        .cart-count { position:absolute; top:-6px; right:-6px; background:#e74c3c; color:white; border-radius:50%; padding:2px 5px; font-size:9px; min-width:18px; text-align:center; font-weight:700; }
+
+        /* SEARCH */
+        .search-modal { position:absolute; top:74px; right:24px; width:90%; max-width:360px; background:var(--card); border-radius:16px; z-index:1002; display:none; box-shadow:0 20px 60px rgba(0,0,0,0.6); border:1px solid var(--border); overflow:hidden; }
+        .search-modal.open { display:block; animation:slideDown 0.2s ease; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .search-modal input { width:100%; padding:16px 20px; border:none; outline:none; background:transparent; color:var(--white); font-family:'DM Sans',sans-serif; font-size:14px; border-bottom:1px solid var(--border); }
+        .search-modal input::placeholder { color:var(--muted); }
+        .search-results { max-height:280px; overflow-y:auto; }
+        .search-result-item { padding:12px 16px; cursor:pointer; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); transition:background 0.2s; }
+        .search-result-item:hover { background:rgba(255,255,255,0.03); }
+        .search-result-item img { width:42px; height:42px; object-fit:cover; border-radius:8px; }
+
+        /* SIDE MENU */
+        .side-menu { position:fixed; left:-300px; top:0; width:300px; height:100%; background:var(--dark); z-index:1100; transition:left 0.35s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; border-right:1px solid var(--border); }
+        .side-menu.open { left:0; }
+        .side-menu-header { padding:24px 24px 20px; border-bottom:1px solid var(--border); }
+        .side-menu-brand { font-family:'Playfair Display',serif; font-size:18px; color:var(--white); display:flex; justify-content:space-between; align-items:center; }
+        .close-menu { background:none; border:1px solid var(--border); color:var(--muted); font-size:16px; cursor:pointer; width:32px; height:32px; border-radius:50%; transition:all 0.2s; }
+        .close-menu:hover { border-color:var(--gold); color:var(--gold); }
+        .side-menu-links { flex:1; padding:20px 0; }
+        .side-menu-link { display:flex; align-items:center; gap:16px; padding:16px 24px; cursor:pointer; font-size:13px; font-weight:500; letter-spacing:1px; text-transform:uppercase; color:var(--muted); transition:all 0.2s; border-left:2px solid transparent; }
+        .side-menu-link:hover { color:var(--gold); border-left-color:var(--gold); background:var(--gold-dim); }
+        .side-menu-link i { width:18px; }
+        .menu-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1099; display:none; backdrop-filter:blur(4px); }
+        .menu-overlay.active { display:block; }
+
+        /* HERO */
+        .container { max-width:1400px; margin:0 auto; padding:0 20px; }
+        .hero-banner { margin:24px 0; border-radius:20px; background:linear-gradient(135deg,#0d0d0d,#1a1408,#0d0d0d); border:1px solid rgba(201,168,76,0.15); padding:48px 40px; position:relative; overflow:hidden; text-align:center; }
+        .hero-banner::before { content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:400px; height:200px; background:radial-gradient(ellipse,rgba(201,168,76,0.15),transparent 70%); }
+        .hero-eyebrow { font-size:9px; letter-spacing:5px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:12px; display:block; }
+        .hero-title { font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,52px); font-weight:900; color:var(--white); line-height:1.1; margin-bottom:12px; }
+        .hero-title em { font-style:italic; color:var(--gold); }
+        .hero-sub { font-size:13px; color:var(--muted); letter-spacing:0.5px; }
+        .hero-divider { width:40px; height:1px; background:var(--gold); margin:16px auto; opacity:0.6; }
+        .hero-badges { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-top:20px; }
+        .hero-badge { font-size:11px; color:var(--gold); background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.25); padding:6px 16px; border-radius:50px; letter-spacing:0.5px; }
+
+        /* SLIDER */
+        .slider-section { margin-bottom:32px; display:block; }
+        .slider-section.hide { display:none; }
+        .slider-wrapper { width:100%; max-width:520px; margin:0 auto; position:relative; border-radius:20px; border:1px solid rgba(201,168,76,0.15); overflow:hidden; box-shadow:0 24px 80px rgba(0,0,0,0.5); }
+        .slider-track { display:flex; overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; }
+        .slider-track::-webkit-scrollbar { display:none; }
+        .slider-item { flex:0 0 100%; cursor:pointer; }
+        .slider-item img { width:100%; height:auto; display:block; }
+        .slider-btn { position:absolute; background:rgba(0,0,0,0.7); border:1px solid rgba(201,168,76,0.3); color:var(--gold); width:40px; height:40px; border-radius:50%; cursor:pointer; top:50%; transform:translateY(-50%); z-index:10; font-size:13px; transition:all 0.2s; backdrop-filter:blur(8px); }
+        .slider-btn:hover { background:var(--gold); color:var(--black); }
+        .slider-btn-left { left:12px; }
+        .slider-btn-right { right:12px; }
+
+        /* CATEGORIES */
+        .category-buttons-section { margin-bottom:32px; }
+        .section-label { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:16px; display:block; }
+        .category-buttons-grid { display:flex; gap:12px; flex-wrap:wrap; }
+        .category-btn { flex:1; min-width:100px; background:var(--card); border-radius:16px; padding:20px 16px; text-align:center; cursor:pointer; border:1px solid var(--border); transition:all 0.35s cubic-bezier(0.4,0,0.2,1); position:relative; overflow:hidden; }
+        .category-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(201,168,76,0.08),transparent); opacity:0; transition:opacity 0.3s; }
+        .category-btn:hover::before,.category-btn.active::before { opacity:1; }
+        .category-btn:hover { border-color:rgba(201,168,76,0.4); transform:translateY(-3px); box-shadow:0 12px 40px rgba(201,168,76,0.12); }
+        .category-btn.active { border-color:var(--gold); background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.05)); }
+        .category-btn-icon { font-size:28px; margin-bottom:10px; display:block; }
+        .category-btn-name { font-size:11px; font-weight:600; letter-spacing:0.5px; color:var(--text); }
+        .category-btn.active .category-btn-name { color:var(--gold); }
+
+        /* PRODUCTS */
+        .section-title { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--white); margin:0 0 20px; display:flex; align-items:center; gap:14px; }
+        .section-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(201,168,76,0.4),transparent); }
+        .product-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:40px; }
+        .product-card { background:var(--card); border-radius:16px; overflow:hidden; border:1px solid var(--border); transition:all 0.35s cubic-bezier(0.4,0,0.2,1); }
+        .product-card:hover { border-color:rgba(201,168,76,0.3); transform:translateY(-4px); box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+        .product-image-container { position:relative; width:100%; padding-top:85%; overflow:hidden; background:#111; }
+        .product-badge { position:absolute; top:10px; left:10px; z-index:2; background:var(--gold); color:var(--black); font-size:9px; font-weight:700; letter-spacing:0.5px; padding:4px 10px; border-radius:50px; }
+        .product-image { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; cursor:pointer; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+        .product-card:hover .product-image { transform:scale(1.06); }
+        .product-info { padding:14px; }
+        .product-brand { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:4px; }
+        .product-title { font-family:'Playfair Display',serif; font-size:13px; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:8px; }
+        .price-container { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+        .current-price { font-size:16px; font-weight:700; color:var(--gold); }
+        .original-price { font-size:11px; color:var(--muted); text-decoration:line-through; }
+        .discount { font-size:9px; color:#4ade80; font-weight:600; background:rgba(74,222,128,0.1); padding:2px 6px; border-radius:50px; }
+        .add-to-cart { width:100%; padding:10px; background:transparent; color:var(--gold); border:1px solid rgba(201,168,76,0.35); border-radius:10px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; transition:all 0.3s; }
+        .add-to-cart:hover { background:var(--gold); color:var(--black); box-shadow:0 8px 24px rgba(201,168,76,0.3); }
+
+        /* CART SIDEBAR */
+        .cart-sidebar { position:fixed; right:-100%; top:0; width:85%; max-width:400px; height:100%; background:var(--dark); z-index:1101; transition:right 0.35s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; border-left:1px solid var(--border); }
+        .cart-sidebar.open { right:0; box-shadow:-20px 0 60px rgba(0,0,0,0.6); }
+        .cart-header { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .cart-header h3 { font-family:'Playfair Display',serif; font-size:18px; color:var(--white); }
+        .cart-header i { cursor:pointer; color:var(--muted); transition:color 0.2s; font-size:16px; }
+        .cart-header i:hover { color:var(--gold); }
+        .cart-items { flex:1; overflow-y:auto; padding:16px; }
+        .cart-footer { padding:16px 20px; border-top:1px solid var(--border); background:var(--dark); }
+        .cart-total { font-size:14px; color:var(--muted); margin-bottom:14px; }
+        .cart-total span { color:var(--gold); font-size:20px; font-weight:700; }
+        .checkout-btn { width:100%; padding:14px; background:var(--gold); color:var(--black); border:none; border-radius:12px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; transition:all 0.3s; }
+        .checkout-btn:hover { background:var(--gold-light); box-shadow:0 8px 24px rgba(201,168,76,0.4); }
+        .cart-item { display:flex; gap:14px; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+        .cart-item-image { width:70px; height:70px; object-fit:cover; border-radius:10px; border:1px solid var(--border); }
+        .cart-item-details { flex:1; }
+        .cart-item-brand { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
+        .cart-item-title { font-size:13px; font-weight:500; color:var(--white); margin:3px 0; }
+        .cart-item-price { color:var(--gold); font-weight:700; font-size:15px; }
+        .cart-quantity { display:flex; align-items:center; gap:8px; margin-top:8px; }
+        .cart-quantity button { padding:3px 9px; background:var(--card); color:var(--white); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:13px; transition:all 0.2s; }
+        .cart-quantity button:hover { border-color:var(--gold); color:var(--gold); }
+        .cart-quantity .del-btn { background:rgba(231,76,60,0.1); border-color:rgba(231,76,60,0.3); color:#e74c3c; font-size:10px; }
+
+        /* OLD MODAL (cart checkout) */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:9998; justify-content:center; align-items:center; backdrop-filter:blur(8px); }
+        .modal-content { background:var(--dark); padding:28px; border-radius:20px; width:92%; max-width:500px; max-height:90vh; overflow-y:auto; position:relative; border:1px solid var(--border); box-shadow:0 40px 120px rgba(0,0,0,0.6); animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes modalIn { from{opacity:0;transform:translateY(20px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+        .close-modal { position:absolute; top:16px; right:20px; font-size:20px; cursor:pointer; color:var(--muted); transition:color 0.2s; }
+        .close-modal:hover { color:var(--gold); }
+        .modal-title { font-family:'Playfair Display',serif; font-size:22px; color:var(--white); margin-bottom:20px; }
+        .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1100; display:none; backdrop-filter:blur(4px); }
+        .overlay.active { display:block; }
+        .form-group { margin-bottom:10px; }
+        .form-input { width:100%; padding:12px 16px; background:var(--card); border:1px solid var(--border); border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; transition:border-color 0.2s; outline:none; }
+        .form-input::placeholder { color:var(--muted); }
+        .form-input:focus { border-color:rgba(201,168,76,0.5); }
+        .form-row { display:flex; gap:10px; }
+        .pay-btn { width:100%; padding:14px; background:var(--gold); color:var(--black); border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:16px; transition:all 0.3s; }
+        .pay-btn:hover { background:var(--gold-light); }
+        .order-summary-card { background:var(--card); border-radius:14px; padding:16px; border:1px solid var(--border); margin-bottom:16px; font-size:13px; }
+        .order-summary-card strong { color:var(--gold); font-size:11px; letter-spacing:2px; text-transform:uppercase; display:block; margin-bottom:12px; }
+        .order-line { display:flex; justify-content:space-between; padding:4px 0; color:var(--text); border-bottom:1px solid var(--border); }
+        .order-total { display:flex; justify-content:space-between; padding:12px 0 0; font-weight:700; color:var(--gold); font-size:16px; }
+        .section-form-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:12px; margin-top:20px; display:block; }
+        .payment-method-section { margin:20px 0 16px; }
+        .payment-method-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:12px; display:block; }
+        .payment-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .payment-option { border:1.5px solid var(--border); border-radius:14px; padding:14px 12px; cursor:pointer; text-align:center; transition:all 0.3s; position:relative; background:var(--card); }
+        .payment-option.selected { border-color:var(--gold); background:rgba(201,168,76,0.08); }
+        .payment-option.selected::after { content:'✓'; position:absolute; top:8px; right:10px; color:var(--gold); font-size:11px; font-weight:700; }
+        .payment-option-icon { font-size:26px; margin-bottom:6px; display:block; }
+        .payment-option-name { font-size:12px; font-weight:600; color:var(--white); }
+        .payment-option.selected .payment-option-name { color:var(--gold); }
+        .payment-option-desc { font-size:10px; color:var(--muted); margin-top:3px; }
+        .upi-info-box { background:rgba(74,222,128,0.07); border:1px solid rgba(74,222,128,0.2); border-radius:12px; padding:14px; margin:14px 0; font-size:13px; color:var(--text); display:none; }
+        .upi-info-box.show { display:block; }
+        .upi-info-box strong { color:var(--green); }
+        .upi-info-box .upi-id { font-size:14px; font-weight:700; color:var(--green); background:rgba(74,222,128,0.1); padding:6px 14px; border-radius:8px; display:inline-block; margin:8px 0; }
+        .upi-steps { margin-top:10px; padding-left:0; list-style:none; }
+        .upi-steps li { font-size:12px; color:var(--muted); padding:3px 0; }
+        .upi-steps li::before { content:'→ '; color:var(--green); font-weight:700; }
+        .cod-split-box { background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.2); border-radius:12px; padding:14px; margin:14px 0; display:none; }
+        .cod-split-box.show { display:block; }
+        .split-row { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .split-row:last-child { border-bottom:none; padding-top:10px; font-weight:700; }
+        .split-label { color:var(--muted); }
+        .split-value { color:var(--gold); font-weight:600; }
+        .split-value.highlight { color:var(--green); font-size:15px; }
+        .contact-info-item { display:flex; align-items:center; gap:12px; padding:14px; background:var(--card); border-radius:12px; border:1px solid var(--border); margin-bottom:10px; font-size:13px; color:var(--text); }
+        .contact-info-item i { color:var(--gold); width:16px; }
+        .close-contact-btn { background:var(--gold); color:var(--black); padding:10px 24px; border:none; border-radius:10px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:700; font-size:12px; margin-top:12px; transition:all 0.2s; }
+
+        /* PRODUCT DETAIL */
+        .product-detail-container { max-width:1200px; margin:0 auto; padding:16px; }
+        .back-home-btn { background:transparent; color:var(--muted); border:1px solid var(--border); padding:10px 20px; border-radius:50px; cursor:pointer; font-size:12px; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:8px; margin-bottom:20px; transition:all 0.2s; }
+        .back-home-btn:hover { border-color:var(--gold); color:var(--gold); }
+        .product-detail-main { display:grid; grid-template-columns:1fr; gap:28px; background:var(--card); border-radius:20px; padding:24px; border:1px solid var(--border); }
+        @media(min-width:768px){.product-detail-main{grid-template-columns:1fr 1fr;padding:40px;gap:48px}}
+        .main-image-container { position:relative; width:100%; padding-top:100%; background:var(--black); border-radius:16px; overflow:hidden; border:1px solid var(--border); }
+        .main-image { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; }
+        .detail-brand { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:8px; }
+        .detail-title { font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); font-weight:700; color:var(--white); margin-bottom:16px; line-height:1.2; }
+        .detail-price { font-size:28px; font-weight:700; color:var(--gold); }
+        .detail-original { font-size:14px; color:var(--muted); text-decoration:line-through; margin-left:8px; }
+        .detail-discount { font-size:11px; color:#4ade80; background:rgba(74,222,128,0.1); padding:3px 10px; border-radius:50px; font-weight:600; }
+        .size-label,.quantity-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:600; margin:20px 0 10px; }
+        .size-options { display:flex; gap:10px; flex-wrap:wrap; }
+        .size-btn { width:46px; height:46px; border:1px solid var(--border); background:var(--card); border-radius:10px; cursor:pointer; font-weight:600; font-size:13px; color:var(--text); transition:all 0.2s; }
+        .size-btn.selected { border-color:var(--gold); background:var(--gold); color:var(--black); }
+        .quantity-selector { display:flex; align-items:center; gap:16px; }
+        .quantity-btn { width:38px; height:38px; border:1px solid var(--border); background:var(--card); border-radius:8px; cursor:pointer; font-size:18px; color:var(--white); display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+        .quantity-btn:hover { border-color:var(--gold); color:var(--gold); }
+        .qty-display { font-size:18px; font-weight:600; min-width:30px; text-align:center; color:var(--white); }
+        .action-buttons { display:flex; gap:14px; margin:28px 0; flex-wrap:wrap; }
+        .btn-add-cart,.btn-buy-now { flex:1; padding:14px; border:none; border-radius:12px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; transition:all 0.3s; }
+        .btn-add-cart { background:transparent; color:var(--gold); border:1px solid rgba(201,168,76,0.4); }
+        .btn-add-cart:hover { background:var(--gold-dim); border-color:var(--gold); }
+        .btn-buy-now { background:var(--gold); color:var(--black); }
+        .btn-buy-now:hover { background:var(--gold-light); box-shadow:0 8px 24px rgba(201,168,76,0.35); }
+        .btn-buy-now:disabled { opacity:0.8; cursor:not-allowed; }
+        .related-section { margin-top:40px; padding-top:32px; border-top:1px solid var(--border); }
+        .related-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); margin-bottom:20px; }
+        .related-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+        .related-card { background:var(--card); border-radius:14px; overflow:hidden; cursor:pointer; border:1px solid var(--border); transition:all 0.3s; }
+        .related-card:hover { transform:translateY(-3px); border-color:rgba(201,168,76,0.3); }
+        .related-img-container { position:relative; width:100%; padding-top:100%; background:var(--black); }
+        .related-img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; }
+        .related-info { padding:10px; }
+        .related-name { font-size:12px; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .related-price { color:var(--gold); font-weight:700; font-size:13px; margin-top:3px; }
+        .success-icon-wrap { text-align:center; margin-bottom:16px; }
+        .success-icon-wrap i { font-size:64px; color:#4ade80; }
+        .success-title { font-family:'Playfair Display',serif; font-size:24px; text-align:center; color:var(--white); margin-bottom:12px; }
+        .success-info { background:var(--card); border-radius:14px; padding:16px; font-size:13px; line-height:1.7; border:1px solid var(--border); margin-bottom:20px; }
+
+        /* FOOTER */
+        .footer { background:var(--dark); border-top:1px solid var(--border); padding:40px 24px 24px; margin-top:40px; }
+        .footer-top { max-width:1200px; margin:0 auto 32px; text-align:center; }
+        .footer-logo { font-family:'Playfair Display',serif; font-size:22px; color:var(--white); margin-bottom:6px; }
+        .footer-tagline { font-size:11px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
+        .footer-divider { width:40px; height:1px; background:var(--gold); margin:20px auto; opacity:0.4; }
+        .footer-container { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; max-width:1200px; margin:0 auto 24px; }
+        @media(min-width:600px){.footer-container{grid-template-columns:repeat(4,1fr)}}
+        .footer-section h4 { font-size:9px; margin-bottom:12px; color:var(--gold); letter-spacing:3px; text-transform:uppercase; font-weight:600; }
+        .footer-section a,.footer-section p { font-size:12px; color:var(--muted); text-decoration:none; cursor:pointer; display:block; margin-bottom:7px; transition:color 0.2s; }
+        .footer-section a:hover { color:var(--gold); }
+        .footer-bottom { border-top:1px solid var(--border); padding-top:20px; text-align:center; font-size:11px; color:var(--muted); max-width:1200px; margin:0 auto; }
+
+        /* TOAST */
+        .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--card); color:var(--white); padding:12px 24px; border-radius:50px; z-index:99999; font-size:13px; font-weight:500; white-space:nowrap; border:1px solid var(--border); animation:toastAnim 3s ease; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+        @keyframes toastAnim { 0%{opacity:0;bottom:0}10%{opacity:1;bottom:24px}90%{opacity:1;bottom:24px}100%{opacity:0;bottom:0} }
+
+        @media(min-width:768px){.product-grid,.related-grid{grid-template-columns:repeat(4,1fr);gap:20px}}
+        @media(max-width:480px){.product-grid{gap:10px}.hero-banner{padding:32px 20px}}
+
+        .btn-spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(0,0,0,0.3); border-top-color:var(--black); border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:6px; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        #fullScreenLoader { position:fixed; inset:0; background:#fff; z-index:99990; display:none; flex-direction:column; align-items:center; justify-content:center; gap:28px; }
+        #fullScreenLoader.active { display:flex; }
+        .loader-ring { width:80px; height:80px; position:relative; }
+        .loader-ring svg { width:80px; height:80px; transform:rotate(-90deg); }
+        .loader-ring-bg { fill:none; stroke:#f0e8d0; stroke-width:6; }
+        .loader-ring-fill { fill:none; stroke:#c9a84c; stroke-width:6; stroke-linecap:round; stroke-dasharray:220; stroke-dashoffset:220; animation:ringFill 3s linear forwards; }
+        @keyframes ringFill { from{stroke-dashoffset:220} to{stroke-dashoffset:0} }
+        .loader-center-icon { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:28px; }
+        .loader-text { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; color:#333; letter-spacing:2px; text-transform:uppercase; }
+        .loader-dots::after { content:''; animation:dotsCycle 1.5s steps(4,end) infinite; }
+        @keyframes dotsCycle { 0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'} }
+        .loader-sub { font-size:11px; color:#999; letter-spacing:1px; font-family:'DM Sans',sans-serif; }
+
+        #userDetailsModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.82); z-index:9990; justify-content:center; align-items:flex-end; backdrop-filter:blur(10px); }
+        #userDetailsModal.active { display:flex; }
+        .udetails-sheet { background:var(--dark); border-radius:24px 24px 0 0; width:100%; max-width:540px; max-height:92vh; overflow-y:auto; padding:28px 24px 36px; border:1px solid var(--border); border-bottom:none; animation:slideUp 0.38s cubic-bezier(0.34,1.2,0.64,1); }
+        @keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+        .udetails-handle { width:40px; height:4px; background:var(--border); border-radius:10px; margin:0 auto 20px; }
+        .udetails-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); margin-bottom:4px; }
+        .udetails-sub { font-size:12px; color:var(--muted); margin-bottom:22px; }
+        .udetails-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:10px; display:block; margin-top:18px; }
+        .udetails-input { width:100%; padding:13px 16px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s; }
+        .udetails-input::placeholder { color:var(--muted); }
+        .udetails-input:focus { border-color:rgba(201,168,76,0.6); background:rgba(201,168,76,0.04); }
+        .udetails-row { display:flex; gap:10px; }
+        .udetails-row .udetails-input { flex:1; }
+        .udetails-continue-btn { width:100%; padding:16px; margin-top:24px; background:var(--gold); color:var(--black); border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:10px; }
+        .udetails-continue-btn:hover { background:var(--gold-light); box-shadow:0 8px 28px rgba(201,168,76,0.4); transform:translateY(-1px); }
+
+        #orderPayModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9991; justify-content:center; align-items:flex-end; backdrop-filter:blur(10px); }
+        #orderPayModal.active { display:flex; }
+        .opay-sheet { background:var(--dark); border-radius:24px 24px 0 0; width:100%; max-width:540px; max-height:94vh; overflow-y:auto; padding:28px 24px 40px; border:1px solid var(--border); border-bottom:none; animation:slideUp 0.38s cubic-bezier(0.34,1.2,0.64,1); }
+        .opay-handle { width:40px; height:4px; background:var(--border); border-radius:10px; margin:0 auto 20px; }
+        .opay-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); margin-bottom:18px; }
+        .opay-summary { background:var(--card); border-radius:14px; padding:16px; border:1px solid var(--border); margin-bottom:20px; }
+        .opay-summary-header { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:12px; }
+        .opay-line { display:flex; justify-content:space-between; padding:5px 0; font-size:13px; color:var(--text); border-bottom:1px solid var(--border); }
+        .opay-line:last-child { border-bottom:none; }
+        .opay-total-row { display:flex; justify-content:space-between; padding:14px 0 0; font-weight:700; color:var(--gold); font-size:17px; }
+        .opay-methods-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:12px; display:block; }
+        .opay-methods { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+        .opay-method-card { border:2px solid var(--border); border-radius:16px; padding:18px 14px; cursor:pointer; text-align:center; transition:all 0.3s; background:var(--card); position:relative; }
+        .opay-method-card:hover { border-color:rgba(201,168,76,0.4); transform:translateY(-2px); }
+        .opay-method-card.selected { border-color:var(--gold); background:rgba(201,168,76,0.08); }
+        .opay-method-card.selected::after { content:'✓'; position:absolute; top:8px; right:12px; color:var(--gold); font-size:12px; font-weight:700; }
+        .opay-method-icon { font-size:32px; margin-bottom:8px; display:block; }
+        .opay-method-name { font-size:13px; font-weight:700; color:var(--white); }
+        .opay-method-card.selected .opay-method-name { color:var(--gold); }
+        .opay-method-sub { font-size:10px; color:var(--muted); margin-top:4px; }
+        .opay-detail-box { border-radius:14px; padding:16px; margin-bottom:16px; display:none; }
+        .opay-detail-box.show { display:block; animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        .opay-upi-box{ background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.25); }
+        .opay-cod-box { background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.25); }
+        .opay-upi-id-row { display:flex; align-items:center; justify-content:space-between; gap:10px; background:rgba(74,222,128,0.1); border-radius:10px; padding:10px 14px; margin:10px 0; }
+        .opay-upi-id { font-size:15px; font-weight:700; color:var(--green); letter-spacing:0.5px; }
+        .copy-upi-btn { background:none; border:1px solid rgba(74,222,128,0.4); color:var(--green); border-radius:8px; padding:5px 12px; font-size:11px; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:600; transition:all 0.2s; }
+        .copy-upi-btn:hover { background:rgba(74,222,128,0.15); }
+        .opay-open-upi-btn{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px; background:rgba(201,168,76,0.10); border:1px solid rgba(201,168,76,0.35); color:var(--gold); border-radius:12px; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+        .opay-open-upi-btn:hover { background:rgba(74,222,128,0.25); }
+        .opay-split-rows { margin:10px 0; }
+        .opay-split-r { display:flex; justify-content:space-between; padding:7px 0; font-size:13px; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .opay-split-r:last-child { border-bottom:none; font-weight:700; font-size:15px; }
+        .opay-split-label { color:var(--muted); }
+        .opay-split-val { color:var(--gold); font-weight:600; }
+        .opay-split-val.green { color:var(--green); font-size:15px; }
+        .opay-timer-bar-wrap { margin-top:14px; display:none; }
+        .opay-timer-bar-wrap.show { display:block; }
+        .opay-timer-label { font-size:11px; color:var(--muted); margin-bottom:6px; display:flex; justify-content:space-between; }
+        .opay-timer-label span { color:var(--gold); font-weight:600; }
+        .opay-timer-track { height:6px; background:rgba(255,255,255,0.06); border-radius:10px; overflow:hidden; }
+        .opay-timer-fill { height:100%; background:linear-gradient(90deg,var(--green),var(--gold)); border-radius:10px; transition:width 1s linear; width:100%; }
+        .opay-place-btn { width:100%; padding:17px; margin-top:20px; background:var(--gold); color:var(--black); border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:10px; }
+        .opay-place-btn:hover { background:var(--gold-light); box-shadow:0 10px 30px rgba(201,168,76,0.4); }
+        .opay-place-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+        #newSuccessModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:9992; justify-content:center; align-items:center; backdrop-filter:blur(14px); }
+        #newSuccessModal.active { display:flex; }
+        .nsuccess-card { background:var(--dark); border-radius:24px; padding:36px 28px; width:92%; max-width:440px; border:1px solid rgba(74,222,128,0.2); text-align:center; animation:modalIn 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 0 60px rgba(74,222,128,0.1); }
+        .nsuccess-icon { font-size:72px; display:block; margin-bottom:16px; animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
+        @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+        .nsuccess-title { font-family:'Playfair Display',serif; font-size:26px; color:var(--white); margin-bottom:8px; }
+        .nsuccess-sub { font-size:13px; color:var(--muted); margin-bottom:24px; }
+        .nsuccess-details { background:var(--card); border-radius:14px; padding:16px; text-align:left; border:1px solid var(--border); margin-bottom:24px; font-size:13px; line-height:2; }
+        .nsuccess-detail-row { display:flex; justify-content:space-between; margin-bottom:6px; }
+        .nsuccess-detail-row span:first-child { color:var(--muted); }
+        .nsuccess-detail-row span:last-child { color:var(--white); font-weight:600; }
+        .nsuccess-shop-btn { width:100%; padding:16px; background:var(--gold); color:var(--black); border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer; transition:all 0.3s; }
+        .nsuccess-shop-btn:hover { background:var(--gold-light); }
+   </style>
 </head>
 <body>
-
 <div class="header">
     <div class="nav-container">
-        <a class="logo" id="homeLink">
-            CLOTHING INDIA
-            <span class="logo-sub">Premium Fashion</span>
-        </a>
+        <a class="logo" id="homeLink">CLOTHING INDIA<span class="logo-sub">Premium Fashion</span></a>
         <div class="right-section">
             <button class="icon-btn" id="searchIconBtn"><i class="fas fa-search"></i></button>
             <a class="cart-link" id="cartIconBtn"><i class="fas fa-shopping-bag"></i> Cart <span class="cart-count" id="cartCount">0</span></a>
@@ -573,12 +358,10 @@
         </div>
     </div>
 </div>
-
 <div class="search-modal" id="searchModal">
     <input type="text" id="searchModalInput" placeholder="Search for clothes...">
     <div class="search-results" id="searchResults"></div>
 </div>
-
 <div class="side-menu" id="sideMenu">
     <div class="side-menu-header">
         <div class="side-menu-brand">
@@ -592,7 +375,6 @@
     </div>
 </div>
 <div class="menu-overlay" id="menuOverlay"></div>
-
 <div id="contactModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -602,27 +384,64 @@
         <button class="close-contact-btn" id="closeContactBtn">Close</button>
     </div>
 </div>
-
 <div id="checkoutModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <p class="modal-title"><i class="fas fa-truck" style="color:var(--gold);margin-right:10px;"></i>Complete Your Order</p>
         <div id="orderSummary"></div>
-        <div class="cod-info"><i class="fas fa-coins" style="color:var(--gold);margin-right:6px;"></i> <strong>Cash on Delivery</strong> — Pay in cash when your order arrives.</div>
+        <div class="payment-method-section">
+            <span class="payment-method-label">Choose Payment Method</span>
+            <div class="payment-options">
+                <div class="payment-option" id="optUPI" onclick="selectPayment('upi')">
+                    <span class="payment-option-icon">📲</span>
+                    <div class="payment-option-name">UPI / Online</div>
+                    <div class="payment-option-desc">Pay full amount now</div>
+                </div>
+                <div class="payment-option" id="optCOD" onclick="selectPayment('cod')">
+                    <span class="payment-option-icon">🚚</span>
+                    <div class="payment-option-name">50% Advance + COD</div>
+                    <div class="payment-option-desc">50% now, rest on delivery</div>
+                </div>
+            </div>
+        </div>
+        <div class="upi-info-box" id="upiInfoBox">
+            <strong>💚 Pay via UPI to confirm your order</strong><br><br>
+            UPI ID: <span class="upi-id">krishna6642@ybl</span>
+            <ul class="upi-steps">
+                <li>Open any UPI app (GPay, PhonePe, Paytm, etc.)</li>
+                <li>Send the exact amount to UPI ID above</li>
+                <li><strong>No screenshot needed — order confirmed instantly</strong></li>
+            </ul>
+            <div style="margin-top:12px;">
+                <a id="upiDeepLink" href="#" style="display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:var(--green);padding:9px 18px;border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;" onclick="openUPI(event)">
+                    <i class="fas fa-mobile-alt"></i> Open UPI App Directly
+                </a>
+            </div>
+        </div>
+        <div class="cod-split-box" id="codSplitBox">
+            <div class="split-row"><span class="split-label">Order Total</span><span class="split-value" id="splitTotal">₹0</span></div>
+            <div class="split-row"><span class="split-label">💚 Pay Now via UPI (50%)</span><span class="split-value highlight" id="splitAdvance">₹0</span></div>
+            <div class="split-row"><span class="split-label">🚚 Pay on Delivery (50%)</span><span class="split-value" id="splitCOD">₹0</span></div>
+            <div class="split-row"><span class="split-label" style="color:var(--gold);font-weight:700;">Total</span><span class="split-value" id="splitFinalTotal">₹0</span></div>
+            <div style="margin-top:12px;padding:10px;background:rgba(201,168,76,0.07);border-radius:8px;font-size:12px;color:var(--muted);">
+                Pay 50% advance via UPI ID: <strong style="color:var(--gold)">krishna6642@ybl</strong><br>Remaining 50% pay in cash when order arrives.
+            </div>
+            <div style="margin-top:10px;">
+                <a id="upiDeepLinkCOD" href="#" style="display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:var(--green);padding:9px 18px;border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;" onclick="openUPICOD(event)">
+                    <i class="fas fa-mobile-alt"></i> Pay 50% via UPI App
+                </a>
+            </div>
+        </div>
         <span class="section-form-label">Delivery Details</span>
         <div class="form-group"><input type="text" id="fullName" placeholder="Full Name *" class="form-input"></div>
         <div class="form-group"><input type="tel" id="mobileNumber" placeholder="Mobile Number *" class="form-input"></div>
         <div class="form-group"><input type="email" id="customerEmail" placeholder="Email Address (optional)" class="form-input"></div>
         <div class="form-group"><textarea id="deliveryAddress" rows="2" placeholder="Complete Address *" class="form-input" style="resize:none;"></textarea></div>
-        <div class="form-row">
-            <input type="text" id="city" placeholder="City *" class="form-input">
-            <input type="text" id="pinCode" placeholder="Pin Code *" class="form-input">
-        </div>
-        <div class="form-group" style="margin-top:10px;"><input type="text" id="state" placeholder="State" class="form-input"></div>
-        <button id="placeOrderBtn" class="pay-btn">✅ Confirm Order — Cash on Delivery</button>
+        <div class="form-row"><input type="text" id="city" placeholder="City *" class="form-input"><input type="text" id="pinCode" placeholder="Pin Code *" class="form-input"></div>
+        <div class="form-group"><input type="text" id="state" placeholder="State" class="form-input"></div>
+        <button id="placeOrderBtn" class="pay-btn">Select a payment method above</button>
     </div>
 </div>
-
 <div id="orderSuccessModal" class="modal">
     <div class="modal-content" style="text-align:center;">
         <div class="success-icon-wrap"><i class="fas fa-check-circle"></i></div>
@@ -631,353 +450,472 @@
         <button id="closeSuccessBtn" class="pay-btn">Continue Shopping</button>
     </div>
 </div>
-
-<div id="mainContent">
-    <div class="container">
-        <div class="hero-banner">
-            <span class="hero-eyebrow">Exclusive Collection 2025</span>
-            <h1 class="hero-title">Big Fashion <em>Festival</em></h1>
-            <div class="hero-divider"></div>
-            <p class="hero-sub">Premium quality. Unbeatable prices. Delivered to your door.</p>
-            <div class="hero-badges">
-                <span class="hero-badge">🔥 Up to 80% Off</span>
-                <span class="hero-badge">📦 Free Shipping</span>
-                <span class="hero-badge">💰 Cash on Delivery</span>
-            </div>
-        </div>
-        
-        <!-- SLIDER SECTION - Will be shown only for GYM category -->
-        <div class="slider-section" id="sliderSection">
-            <div class="slider-wrapper">
-                <button class="slider-btn slider-btn-left" id="gymSliderLeft">❮</button>
-                <div class="slider-container">
-                    <div class="slider-track" id="gymSliderTrack"></div>
-                </div>
-                <button class="slider-btn slider-btn-right" id="gymSliderRight">❯</button>
-            </div>
-        </div>
-        
-        <div class="category-buttons-section">
-            <span class="section-label">Shop by Category</span>
-            <div class="category-buttons-grid">
-                <div class="category-btn" data-cat="gym"><span class="category-btn-icon">💪</span><div class="category-btn-name">GYM First Choice</div></div>
-                <div class="category-btn" data-cat="bull"><span class="category-btn-icon">🐂</span><div class="category-btn-name">BULL PRINT</div></div>
-                <div class="category-btn" data-cat="premium"><span class="category-btn-icon">✨</span><div class="category-btn-name">Extra Premium</div></div>
-            </div>
-        </div>
-        <h2 class="section-title" id="categoryTitle">Recommended For You</h2>
-        <div class="product-grid" id="productGrid"></div>
+<div id="fullScreenLoader">
+    <div class="loader-ring">
+        <svg viewBox="0 0 80 80">
+            <circle class="loader-ring-bg" cx="40" cy="40" r="35"/>
+            <circle class="loader-ring-fill" id="loaderRingFill" cx="40" cy="40" r="35"/>
+        </svg>
+        <div class="loader-center-icon">🛍️</div>
+    </div>
+    <div class="loader-text">Initializing<span class="loader-dots"></span></div>
+    <div class="loader-sub">Setting up your order experience</div>
+</div>
+<div id="userDetailsModal">
+    <div class="udetails-sheet">
+        <div class="udetails-handle"></div>
+        <div class="udetails-title">📦 Delivery Details</div>
+        <div class="udetails-sub">We need your details to deliver your order</div>
+        <span class="udetails-label">Full Name *</span>
+        <input type="text" id="ud_name" class="udetails-input" placeholder="Enter your full name">
+        <span class="udetails-label">Mobile Number *</span>
+        <input type="tel" id="ud_mobile" class="udetails-input" placeholder="+91 XXXXX XXXXX">
+        <span class="udetails-label">Email Address</span>
+        <input type="email" id="ud_email" class="udetails-input" placeholder="Optional — for order confirmation">
+        <span class="udetails-label">Delivery Address *</span>
+        <textarea id="ud_address" class="udetails-input" rows="2" style="resize:none;" placeholder="House no., Street, Area, Landmark"></textarea>
+        <span class="udetails-label">City & Pin Code *</span>
+        <div class="udetails-row"><input type="text" id="ud_city" class="udetails-input" placeholder="City"><input type="text" id="ud_pin" class="udetails-input" placeholder="Pin Code"></div>
+        <span class="udetails-label">State</span>
+        <input type="text" id="ud_state" class="udetails-input" placeholder="State">
+        <button class="udetails-continue-btn" id="udContinueBtn">Continue to Payment <i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
+<div id="orderPayModal">
+    <div class="opay-sheet">
+        <div class="opay-handle"></div>
+        <div class="opay-title">💳 Choose Payment</div>
+        <div class="opay-summary" id="opayOrderSummary"></div>
+        <span class="opay-methods-label">Select Payment Method</span>
+        <div class="opay-methods">
+            <div class="opay-method-card" id="opayUpiCard" onclick="selectOpayMethod('upi')"><span class="opay-method-icon">📲</span><div class="opay-method-name">UPI / Online</div><div class="opay-method-sub">Pay full amount now</div></div>
+            <div class="opay-method-card" id="opayCodCard" onclick="selectOpayMethod('cod')"><span class="opay-method-icon">🚚</span><div class="opay-method-name">50% + COD</div><div class="opay-method-sub">Half now, half on delivery</div></div>
+        </div>
+        <div class="opay-detail-box opay-upi-box" id="opayUpiBox">
+            <strong style="color:var(--gold);font-size:13px;">💳 100% Advance Payment via UPI</strong>
+            <div class="opay-upi-id-row"><span class="opay-upi-id">krishna6642@ybl</span><button class="copy-upi-btn" onclick="copyUpiId()">Copy</button></div>
+            <button class="opay-open-upi-btn" onclick="openOpayUPI()"><i class="fas fa-mobile-alt"></i> Open UPI App to Pay ₹<span id="opayUpiAmtDisplay">0</span></button>
+            <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">GPay / PhonePe / Paytm → send to UPI ID → order will be confirmed automatically.</p>
+        </div>
+       <div class="opay-detail-box opay-cod-box" id="opayCodBox">
 
-<div id="productDetailPage" style="display:none;">
-    <div class="product-detail-container" id="productDetailContainer"></div>
+    <strong style="color:var(--gold);font-size:13px;">
+        🚚 50% Advance + Cash on Delivery
+    </strong>
+
+    <div class="opay-split-rows" id="opaySplitRows"></div>
+
+    <button class="opay-open-upi-btn"
+        onclick="openOpayCODUPI()"
+        style="border-color:rgba(201,168,76,0.4);color:var(--gold);background:rgba(201,168,76,0.1);margin-top:10px;">
+
+        <i class="fas fa-mobile-alt"></i>
+        Pay Advance ₹<span id="opayCodAdvDisplay">0</span> via UPI
+    </button>
+
+    <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">
+        Pay 50% advance via UPI, rest ₹<span id="opayCodRestDisplay">0</span> cash on delivery.
+    </p>
+
 </div>
-
+        <button class="opay-place-btn" id="opayPlaceBtn" disabled onclick="placeNewOrder()">Select a payment method</button>
+    </div>
+</div>
+<div id="newSuccessModal">
+    <div class="nsuccess-card">
+        <span class="nsuccess-icon">🎉</span>
+        <div class="nsuccess-title">Order Confirmed!</div>
+        <div class="nsuccess-sub">Your order has been placed successfully</div>
+        <div class="nsuccess-details" id="nsuccessDetails"></div>
+        <button class="nsuccess-shop-btn" id="nsuccessShopBtn">🛍️ Continue Shopping</button>
+    </div>
+</div>
+<div id="mainContent"><div class="container"><div class="hero-banner"><span class="hero-eyebrow">Exclusive Collection 2025</span><h1 class="hero-title">Big Fashion <em>Festival</em></h1><div class="hero-divider"></div><p class="hero-sub">Premium quality. Unbeatable prices. Delivered to your door.</p><div class="hero-badges"><span class="hero-badge">🔥 Up to 80% Off</span><span class="hero-badge">📦 Free Shipping</span><span class="hero-badge">📲 UPI & COD Available</span></div></div><div class="slider-section" id="sliderSection"><div class="slider-wrapper"><button class="slider-btn slider-btn-left" id="gymSliderLeft">❮</button><div class="slider-container"><div class="slider-track" id="gymSliderTrack"></div></div><button class="slider-btn slider-btn-right" id="gymSliderRight">❯</button></div></div><div class="category-buttons-section"><span class="section-label">Shop by Category</span><div class="category-buttons-grid"><div class="category-btn" data-cat="gym"><span class="category-btn-icon">💪</span><div class="category-btn-name">GYM First Choice</div></div><div class="category-btn" data-cat="bull"><span class="category-btn-icon">🐂</span><div class="category-btn-name">BULL PRINT</div></div><div class="category-btn" data-cat="premium"><span class="category-btn-icon">✨</span><div class="category-btn-name">Extra Premium</div></div></div></div><h2 class="section-title" id="categoryTitle">Recommended For You</h2><div class="product-grid" id="productGrid"></div></div></div>
+<div id="productDetailPage" style="display:none;"><div class="product-detail-container" id="productDetailContainer"></div></div>
 <div class="overlay" id="cartOverlay"></div>
-<div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header">
-        <h3>My Bag</h3>
-        <i class="fas fa-times" id="closeCart"></i>
-    </div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-footer">
-        <div class="cart-total">Total: ₹<span id="cartTotal">0</span></div>
-        <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout →</button>
-    </div>
-</div>
-
-<div class="footer">
-    <div class="footer-top">
-        <div class="footer-logo">CLOTHING INDIA</div>
-        <div class="footer-tagline">Premium Fashion · Made for India</div>
-        <div class="footer-divider"></div>
-    </div>
-    <div class="footer-container">
-        <div class="footer-section"><h4>Company</h4><a>About Us</a><a>Contact Us</a></div>
-        <div class="footer-section"><h4>Policy</h4><a>Return Policy</a><a>Privacy Policy</a></div>
-        <div class="footer-section"><h4>Help</h4><a>Payments</a><a>Shipping</a></div>
-        <div class="footer-section"><h4>Contact</h4><p>Indore - 452001</p><p>valueclothingc@gmail.com</p></div>
-    </div>
-    <div class="footer-bottom">© 2025 Clothing India. All rights reserved.</div>
-</div>
-
+<div class="cart-sidebar" id="cartSidebar"><div class="cart-header"><h3>My Bag</h3><i class="fas fa-times" id="closeCart"></i></div><div class="cart-items" id="cartItems"></div><div class="cart-footer"><div class="cart-total">Total: ₹<span id="cartTotal">0</span></div><button class="checkout-btn" id="checkoutBtn">Proceed to Checkout →</button></div></div>
+<div class="footer"><div class="footer-top"><div class="footer-logo">CLOTHING INDIA</div><div class="footer-tagline">Premium Fashion · Made for India</div><div class="footer-divider"></div></div><div class="footer-container"><div class="footer-section"><h4>Company</h4><a>About Us</a><a>Contact Us</a></div><div class="footer-section"><h4>Policy</h4><a>Return Policy</a><a>Privacy Policy</a></div><div class="footer-section"><h4>Help</h4><a>Payments</a><a>Shipping</a></div><div class="footer-section"><h4>Contact</h4><p>Indore - 452001</p><p>valueclothingc@gmail.com</p></div></div><div class="footer-bottom">© 2025 Clothing India. All rights reserved.</div></div>
 <script>
-    const products = [
-        // GYM COLLECTION (All ₹399)
-        { id:1, name:"Gym Pro Track Pant", brand:"Roadster", price:399, originalPrice:1599, discount:"75% off", rating:4.3, category:"gym", image:"images/banner9.jpeg", sizes:["S","M","L","XL"] },
-        { id:2, name:"Performance Track Pant", brand:"HRX", price:399, originalPrice:1199, discount:"67% off", rating:4.4, category:"gym", image:"images/banner1.jpeg", sizes:["S","M","L","XL"] },
-        { id:3, name:"Flexi Gym Track Pant", brand:"Puma", price:399, originalPrice:1499, discount:"73% off", rating:4.5, category:"gym", image:"images/banner2.jpeg", sizes:["S","M","L","XL"] },
-        { id:4, name:"Ultra Dry Gym Pant", brand:"Nike", price:399, originalPrice:1999, discount:"80% off", rating:4.6, category:"gym", image:"images/banner3.jpeg", sizes:["S","M","L","XL"] },
-        { id:5, name:"Sweat Proof Track Pant", brand:"Reebok", price:399, originalPrice:1599, discount:"75% off", rating:4.4, category:"gym", image:"images/banner4.jpeg", sizes:["S","M","L","XL"] },
-        { id:6, name:"Compression Track Pant", brand:"Under Armour", price:399, originalPrice:2199, discount:"82% off", rating:4.7, category:"gym", image:"images/banner5.jpeg", sizes:["S","M","L","XL"] },
-        { id:7, name:"Mesh Gym Track Pant", brand:"Decathlon", price:399, originalPrice:999, discount:"60% off", rating:4.2, category:"gym", image:"images/banner6.jpeg", sizes:["S","M","L","XL"] },
-        { id:8, name:"Thermal Gym Pant", brand:"Roadster", price:399, originalPrice:1699, discount:"76% off", rating:4.5, category:"gym", image:"images/banner7.jpeg", sizes:["S","M","L","XL"] },
-        { id:9, name:"Quick Dry Track Pant", brand:"HRX", price:399, originalPrice:1099, discount:"64% off", rating:4.3, category:"gym", image:"images/banner8.jpeg", sizes:["S","M","L","XL"] },
-        { id:10, name:"Stretch Fit Gym Pant", brand:"Puma", price:399, originalPrice:1599, discount:"75% off", rating:4.6, category:"gym", image:"images/banner10.jpeg", sizes:["S","M","L","XL"] },
-        { id:11, name:"Pro Athlete Track Pant", brand:"Adidas", price:399, originalPrice:2499, discount:"84% off", rating:4.8, category:"gym", image:"images/banner11.jpeg", sizes:["S","M","L","XL"] },
-        
-        // BULL PRINT COLLECTION (All ₹399)
-        { id:12, name:"Bull Print Bootcut Pant", brand:"Bull & Couture", price:399, originalPrice:1499, discount:"73% off", rating:4.5, category:"bull", image:"images/banner12.PNG", sizes:["S","M","L","XL"] },
-        { id:13, name:"Angry Bull Graphic Bootcut", brand:"Bull Nation", price:399, originalPrice:1399, discount:"71% off", rating:4.3, category:"bull", image:"images/banner13.PNG", sizes:["S","M","L","XL"] },
-        { id:14, name:"Bull Edition Track Pant", brand:"Bullwear", price:399, originalPrice:1599, discount:"75% off", rating:4.4, category:"bull", image:"images/banner14.PNG", sizes:["S","M","L","XL"] },
-        { id:15, name:"Wild Bull Bootcut Pant", brand:"Bull Force", price:399, originalPrice:1799, discount:"78% off", rating:4.6, category:"bull", image:"images/banner15.PNG", sizes:["S","M","L","XL"] },
-        
-        // EXTRA PREMIUM COLLECTION (All ₹399)
-        { id:16, name:"Premium Cotton Track Pant", brand:"Aurelia", price:399, originalPrice:1899, discount:"79% off", rating:4.6, category:"premium", image:"images/banner16.PNG", sizes:["S","M","L","XL"] },
-        { id:17, name:"Luxury Fabric Track Pant", brand:"United Colors", price:399, originalPrice:2199, discount:"82% off", rating:4.7, category:"premium", image:"images/banner17.PNG", sizes:["S","M","L","XL"] },
-        { id:18, name:"Supreme Comfort Track Pant", brand:"Adidas", price:399, originalPrice:1999, discount:"80% off", rating:4.5, category:"premium", image:"images/banner18.PNG", sizes:["S","M","L","XL"] },
-        { id:19, name:"Premium Velvet Track Pant", brand:"Premium Club", price:399, originalPrice:2999, discount:"87% off", rating:4.8, category:"premium", image:"images/banner19.PNG", sizes:["S","M","L","XL"] },
-        { id:20, name:"Luxury Silk Touch Pant", brand:"Luxury Wear", price:399, originalPrice:2799, discount:"86% off", rating:4.7, category:"premium", image:"images/banner20.PNG", sizes:["S","M","L","XL"] },
-        { id:21, name:"Royal Premium Fabric", brand:"Royal Club", price:399, originalPrice:2599, discount:"85% off", rating:4.6, category:"premium", image:"images/banner21.PNG", sizes:["S","M","L","XL"] },
-        { id:22, name:"Ultra Soft Premium Pant", brand:"SoftWear", price:399, originalPrice:1799, discount:"78% off", rating:4.5, category:"premium", image:"images/banner22.PNG", sizes:["S","M","L","XL"] }
-    ];
 
-    let cart = [];
-    let currentProduct = null;
-    let selectedSize = "M";
-    let productQuantity = 1;
-    let currentDisplayCategory = 'gym';
+const UPI_ID='krishna6642@ybl', UPI_NAME='Shrikrushna';
+const products=[{id:1,name:"Gym Pro Track Pant",brand:"Roadster",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner9.jpeg",sizes:["S","M","L","XL"]},{id:2,name:"Performance Track Pant",brand:"HRX",price:399,originalPrice:1199,discount:"67% off",category:"gym",image:"images/banner1.jpeg",sizes:["S","M","L","XL"]},{id:3,name:"Flexi Gym Track Pant",brand:"Puma",price:399,originalPrice:1499,discount:"73% off",category:"gym",image:"images/banner2.jpeg",sizes:["S","M","L","XL"]},{id:4,name:"Ultra Dry Gym Pant",brand:"Nike",price:399,originalPrice:1999,discount:"80% off",category:"gym",image:"images/banner3.jpeg",sizes:["S","M","L","XL"]},{id:5,name:"Sweat Proof Track Pant",brand:"Reebok",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner4.jpeg",sizes:["S","M","L","XL"]},{id:6,name:"Compression Track Pant",brand:"Under Armour",price:399,originalPrice:2199,discount:"82% off",category:"gym",image:"images/banner5.jpeg",sizes:["S","M","L","XL"]},{id:7,name:"Mesh Gym Track Pant",brand:"Decathlon",price:399,originalPrice:999,discount:"60% off",category:"gym",image:"images/banner6.jpeg",sizes:["S","M","L","XL"]},{id:8,name:"Thermal Gym Pant",brand:"Roadster",price:399,originalPrice:1699,discount:"76% off",category:"gym",image:"images/banner7.jpeg",sizes:["S","M","L","XL"]},{id:9,name:"Quick Dry Track Pant",brand:"HRX",price:399,originalPrice:1099,discount:"64% off",category:"gym",image:"images/banner8.jpeg",sizes:["S","M","L","XL"]},{id:10,name:"Stretch Fit Gym Pant",brand:"Puma",price:399,originalPrice:1599,discount:"75% off",category:"gym",image:"images/banner10.jpeg",sizes:["S","M","L","XL"]},{id:11,name:"Pro Athlete Track Pant",brand:"Adidas",price:399,originalPrice:2499,discount:"84% off",category:"gym",image:"images/banner11.jpeg",sizes:["S","M","L","XL"]},{id:12,name:"Bull Print Bootcut Pant",brand:"Bull & Couture",price:399,originalPrice:1499,discount:"73% off",category:"bull",image:"images/banner12.PNG",sizes:["S","M","L","XL"]},{id:13,name:"Angry Bull Graphic Bootcut",brand:"Bull Nation",price:399,originalPrice:1399,discount:"71% off",category:"bull",image:"images/banner13.PNG",sizes:["S","M","L","XL"]},{id:14,name:"Bull Edition Track Pant",brand:"Bullwear",price:399,originalPrice:1599,discount:"75% off",category:"bull",image:"images/banner14.PNG",sizes:["S","M","L","XL"]},{id:15,name:"Wild Bull Bootcut Pant",brand:"Bull Force",price:399,originalPrice:1799,discount:"78% off",category:"bull",image:"images/banner15.PNG",sizes:["S","M","L","XL"]},{id:16,name:"Premium Cotton Track Pant",brand:"Aurelia",price:399,originalPrice:1899,discount:"79% off",category:"premium",image:"images/banner16.PNG",sizes:["S","M","L","XL"]},{id:17,name:"Luxury Fabric Track Pant",brand:"United Colors",price:399,originalPrice:2199,discount:"82% off",category:"premium",image:"images/banner17.PNG",sizes:["S","M","L","XL"]},{id:18,name:"Supreme Comfort Track Pant",brand:"Adidas",price:399,originalPrice:1999,discount:"80% off",category:"premium",image:"images/banner18.PNG",sizes:["S","M","L","XL"]},{id:19,name:"Premium Velvet Track Pant",brand:"Premium Club",price:399,originalPrice:2999,discount:"87% off",category:"premium",image:"images/banner19.PNG",sizes:["S","M","L","XL"]},{id:20,name:"Luxury Silk Touch Pant",brand:"Luxury Wear",price:399,originalPrice:2799,discount:"86% off",category:"premium",image:"images/banner20.PNG",sizes:["S","M","L","XL"]},{id:21,name:"Royal Premium Fabric",brand:"Royal Club",price:399,originalPrice:2599,discount:"85% off",category:"premium",image:"images/banner21.PNG",sizes:["S","M","L","XL"]},{id:22,name:"Ultra Soft Premium Pant",brand:"SoftWear",price:399,originalPrice:1799,discount:"78% off",category:"premium",image:"images/banner22.PNG",sizes:["S","M","L","XL"]}];
+let cart=[],currentProduct=null,selectedSize="M",productQuantity=1,currentDisplayCategory='gym',selectedPaymentMethod=null,newOrderProduct=null,newOrderQty=1,newOpayMethod=null;
+emailjs.init({publicKey:"4_CPRmnMdVSjbGh84"});
+function loadCart(){const s=localStorage.getItem('clothingCart');cart=s?JSON.parse(s):[];updateCartUI();}
+function saveCart(){localStorage.setItem('clothingCart',JSON.stringify(cart));updateCartUI();}
+function updateCartUI(){const count=cart.reduce((s,i)=>s+i.quantity,0);document.getElementById("cartCount").textContent=count;const itemsDiv=document.getElementById("cartItems");let total=0;if(!cart.length){itemsDiv.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted);">Your bag is empty 🛍️</p>';document.getElementById("cartTotal").textContent="0";return;}itemsDiv.innerHTML=cart.map(item=>{total+=item.price*item.quantity;return`<div class="cart-item"><img src="${item.image}" class="cart-item-image"><div class="cart-item-details"><div class="cart-item-brand">${item.brand}</div><div class="cart-item-title">${item.name}</div><div class="cart-item-price">₹${item.price}</div><div class="cart-quantity"><button onclick="updateQuantity(${item.id},-1)">−</button><span style="color:var(--white);font-weight:600;">${item.quantity}</span><button onclick="updateQuantity(${item.id},1)">+</button><button onclick="removeFromCart(${item.id})" class="del-btn">Remove</button></div></div></div>`;}).join('');document.getElementById("cartTotal").textContent=total.toLocaleString('en-IN');}
+window.updateQuantity=(id,d)=>{const i=cart.find(i=>i.id===id);if(i){i.quantity+=d;if(i.quantity<=0)cart=cart.filter(i=>i.id!==id);saveCart();}};
+window.removeFromCart=id=>{cart=cart.filter(i=>i.id!==id);saveCart();showToast("Removed from bag");};
+function addToCart(pid){const p=products.find(p=>p.id===pid);const e=cart.find(i=>i.id===pid);if(e)e.quantity++;else cart.push({...p,quantity:1});saveCart();showToast(`${p.name} added to bag ✓`);}
+function showToast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+window.selectPayment=function(method){selectedPaymentMethod=method;const total=cart.reduce((s,i)=>s+i.price*i.quantity,0),advance=Math.ceil(total/2);document.getElementById('optUPI').classList.toggle('selected',method==='upi');document.getElementById('optCOD').classList.toggle('selected',method==='cod');if(method==='upi'){document.getElementById('upiInfoBox').classList.add('show');document.getElementById('codSplitBox').classList.remove('show');document.getElementById('upiDeepLink').setAttribute('data-url',`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`);document.getElementById('placeOrderBtn').textContent='✅ Place Order (UPI Full Payment)';}else{document.getElementById('codSplitBox').classList.add('show');document.getElementById('upiInfoBox').classList.remove('show');document.getElementById('splitTotal').textContent=`₹${total.toLocaleString('en-IN')}`;document.getElementById('splitAdvance').textContent=`₹${advance.toLocaleString('en-IN')}`;document.getElementById('splitCOD').textContent=`₹${(total-advance).toLocaleString('en-IN')}`;document.getElementById('splitFinalTotal').textContent=`₹${total.toLocaleString('en-IN')}`;document.getElementById('upiDeepLinkCOD').setAttribute('data-url',`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${advance}&cu=INR&tn=${encodeURIComponent('Clothing India Advance 50%')}`);document.getElementById('placeOrderBtn').textContent='✅ Confirm Order (50% Advance + COD)';}};
+window.openUPI=e=>{e.preventDefault();const u=e.currentTarget.getAttribute('data-url');if(u)window.location.href=u;};
+window.openUPICOD=e=>{e.preventDefault();const u=e.currentTarget.getAttribute('data-url');if(u)window.location.href=u;};
+function openCheckout(){if(!cart.length){showToast("Your bag is empty!");return;}const total=cart.reduce((s,i)=>s+i.price*i.quantity,0);document.getElementById("orderSummary").innerHTML=`<div class="order-summary-card"><strong>Order Summary</strong>${cart.map(i=>`<div class="order-line"><span>${i.name} ×${i.quantity}</span><span>₹${(i.price*i.quantity).toLocaleString('en-IN')}</span></div>`).join('')}<div class="order-total"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div></div>`;selectedPaymentMethod=null;document.getElementById('upiInfoBox').classList.remove('show');document.getElementById('codSplitBox').classList.remove('show');document.getElementById('optUPI').classList.remove('selected');document.getElementById('optCOD').classList.remove('selected');document.getElementById('placeOrderBtn').textContent='Select a payment method above';document.getElementById("checkoutModal").style.display="flex";}
+async function placeOrder(){if(!selectedPaymentMethod){showToast("Please select a payment method!");return;}const fullName=document.getElementById("fullName").value.trim(),mobileNumber=document.getElementById("mobileNumber").value.trim(),customerEmail=document.getElementById("customerEmail").value.trim(),deliveryAddress=document.getElementById("deliveryAddress").value.trim(),city=document.getElementById("city").value.trim(),pinCode=document.getElementById("pinCode").value.trim(),state=document.getElementById("state").value.trim();if(!fullName||!mobileNumber||mobileNumber.length<10||!deliveryAddress){showToast("Please fill all required fields");return;}const total=cart.reduce((s,i)=>s+i.price*i.quantity,0),advance=Math.ceil(total/2),orderId="CLOTH"+Date.now()+Math.floor(Math.random()*10000);const itemsList=cart.map(i=>`${i.name} x${i.quantity} = ₹${i.price*i.quantity}`).join('\n');const paymentNote=selectedPaymentMethod==='upi'?`Payment: Full UPI ₹${total}\nUPI ID: ${UPI_ID}`:`Payment: 50% Advance (₹${advance}) UPI + 50% COD (₹${total-advance})\nUPI ID: ${UPI_ID}`;const btn=document.getElementById("placeOrderBtn");btn.innerHTML='⏳ Placing your order...';btn.disabled=true;try{await emailjs.send("service_ofam3d9","template_z2477uv",{fullName,mobileNumber,customerEmail:customerEmail||"Not provided",deliveryAddress,city,pinCode,state,message:`New Order!\nID: ${orderId}\n${itemsList}\nTotal: ₹${total}\n${paymentNote}`,order_id:orderId,total_amount:`₹${total}`});document.getElementById("checkoutModal").style.display="none";document.getElementById("successOrderId").innerHTML=`<strong>Order ID: ${orderId}</strong><br><br><strong>Name:</strong> ${fullName}<br><strong>Mobile:</strong> ${mobileNumber}<br><strong>Address:</strong> ${deliveryAddress}, ${city} - ${pinCode}${state?', '+state:''}<br><br>📧 Confirmation sent!`;document.getElementById("orderSuccessModal").style.display="flex";cart=[];saveCart();}catch(e){showToast("Failed to place order. Please try again.");}finally{btn.innerHTML=selectedPaymentMethod==='upi'?'✅ Place Order (UPI Full Payment)':'✅ Confirm Order (50% Advance + COD)';btn.disabled=false;}}
+function displayProducts(category=currentDisplayCategory){const filtered=products.filter(p=>p.category===category);const grid=document.getElementById("productGrid");if(!grid)return;const t=document.getElementById("categoryTitle");if(category==='gym')t.textContent='🔥 GYM First Choice Collection';else if(category==='bull')t.textContent='🐂 BULL PRINT Collection';else t.textContent='✨ Extra Premium Collection';grid.innerHTML=filtered.map(p=>`<div class="product-card"><div class="product-image-container"><span class="product-badge">${p.discount}</span><img src="${p.image}" class="product-image" onclick="showProductDetail(${p.id})"></div><div class="product-info"><div class="product-brand">${p.brand}</div><div class="product-title">${p.name}</div><div class="price-container"><span class="current-price">₹${p.price}</span><span class="original-price">₹${p.originalPrice}</span><span class="discount">${p.discount}</span></div><button class="add-to-cart" onclick="addToCart(${p.id})">Add to Bag</button></div></div>`).join('');document.querySelectorAll('.category-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===category));document.getElementById('sliderSection').classList.toggle('hide',category!=='gym');}
+function loadSlider(){const t=document.getElementById('gymSliderTrack');if(t)t.innerHTML=products.filter(p=>p.category==='gym').map(p=>`<div class="slider-item" onclick="showProductDetail(${p.id})"><img src="${p.image}" alt="${p.name}"></div>`).join('');}
+function setupSlider(){const track=document.getElementById('gymSliderTrack');document.getElementById('gymSliderLeft').onclick=()=>track.scrollBy({left:-track.offsetWidth,behavior:'smooth'});document.getElementById('gymSliderRight').onclick=()=>track.scrollBy({left:track.offsetWidth,behavior:'smooth'});}
+window.showProductDetail=function(pid){currentProduct=products.find(p=>p.id===pid);if(!currentProduct)return;selectedSize=currentProduct.sizes?.[1]||"M";productQuantity=1;document.getElementById("productDetailContainer").innerHTML=`<div><button class="back-home-btn" onclick="goBackToHome()">← Back to Collection</button></div><div class="product-detail-main"><div class="main-image-container"><img src="${currentProduct.image}" class="main-image"></div><div><div class="detail-brand">${currentProduct.brand}</div><h1 class="detail-title">${currentProduct.name}</h1><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;"><span class="detail-price">₹${currentProduct.price}</span><span class="detail-original">₹${currentProduct.originalPrice}</span><span class="detail-discount">${currentProduct.discount}</span></div><div class="size-label">Select Size</div><div class="size-options">${(currentProduct.sizes||["S","M","L","XL"]).map(s=>`<button class="size-btn ${selectedSize===s?'selected':''}" onclick="selectSize('${s}',this)">${s}</button>`).join('')}</div><div class="quantity-label">Quantity</div><div class="quantity-selector"><button class="quantity-btn" onclick="changeQuantity(-1)">−</button><span class="qty-display" id="qtyVal">1</span><button class="quantity-btn" onclick="changeQuantity(1)">+</button></div><div class="action-buttons"><button class="btn-add-cart" onclick="addToCartFromDetail()">Add to Bag</button><button class="btn-buy-now" id="detailBuyNowBtn" onclick="startBuyNowFlow(currentProduct,productQuantity)">⚡ Buy Now</button></div></div></div>`;document.getElementById("mainContent").style.display="none";document.getElementById("productDetailPage").style.display="block";window.scrollTo(0,0);};
+window.goBackToHome=()=>{document.getElementById("mainContent").style.display="block";document.getElementById("productDetailPage").style.display="none";displayProducts(currentDisplayCategory);window.scrollTo(0,0);};
+window.selectSize=(s,el)=>{selectedSize=s;document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');};
+window.changeQuantity=d=>{productQuantity=Math.max(1,productQuantity+d);const sp=document.getElementById("qtyVal");if(sp)sp.innerText=productQuantity;};
+window.addToCartFromDetail=()=>{const e=cart.find(i=>i.id===currentProduct.id);if(e)e.quantity+=productQuantity;else cart.push({...currentProduct,quantity:productQuantity});saveCart();showToast("Added to bag ✓");};
+function toggleCart(){document.getElementById("cartSidebar").classList.toggle("open");document.getElementById("cartOverlay").classList.toggle("active");}
+function closeModals(){["checkoutModal","contactModal","orderSuccessModal"].forEach(id=>document.getElementById(id).style.display="none");}
+function showSearchModal(){document.getElementById("searchModal").classList.toggle("open");if(document.getElementById("searchModal").classList.contains("open"))document.getElementById("searchModalInput").focus();}
+function performSearch(){const q=document.getElementById("searchModalInput").value.toLowerCase();const res=document.getElementById("searchResults");if(!q){res.innerHTML='<div style="padding:14px;color:var(--muted);font-size:13px;">Type to search...</div>';return;}const f=products.filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q));res.innerHTML=f.length?f.map(p=>`<div class="search-result-item" onclick="selectSearchProduct(${p.id})"><img src="${p.image}"><div><div style="color:var(--white);font-size:12px;">${p.name}</div><div style="color:var(--gold);font-weight:600;margin-top:2px;">₹${p.price}</div></div></div>`).join(''):'<div style="padding:14px;color:var(--muted);font-size:13px;">No products found</div>';}
+function selectSearchProduct(id){document.getElementById("searchModal").classList.remove("open");showProductDetail(id);}
+function openMenu(){document.getElementById("sideMenu").classList.add("open");document.getElementById("menuOverlay").classList.add("active");}
+function closeMenu(){document.getElementById("sideMenu").classList.remove("open");document.getElementById("menuOverlay").classList.remove("active");}
+function showHome(){document.getElementById("mainContent").style.display="block";document.getElementById("productDetailPage").style.display="none";displayProducts(currentDisplayCategory);closeMenu();window.scrollTo(0,0);}
+function setCategory(cat){currentDisplayCategory=cat;displayProducts(cat);document.querySelector('.category-buttons-section').scrollIntoView({behavior:'smooth',block:'start'});}
+function startBuyNowFlow(product,qty){
 
-    emailjs.init({ publicKey: "4_CPRmnMdVSjbGh84" });
 
-    function loadCart() { const saved = localStorage.getItem('clothingCart'); cart = saved ? JSON.parse(saved) : []; updateCartUI(); }
-    function saveCart() { localStorage.setItem('clothingCart', JSON.stringify(cart)); updateCartUI(); }
+    let paymentTimer;
+let paymentSeconds = 300;
+let paymentVerified = false;
 
-    function updateCartUI() {
-        const count = cart.reduce((s,i)=>s+i.quantity,0);
-        document.getElementById("cartCount").textContent = count;
-        const itemsDiv = document.getElementById("cartItems");
-        let total = 0;
-        if(cart.length===0){ itemsDiv.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted);">Your bag is empty 🛍️</p>'; document.getElementById("cartTotal").textContent="0"; return; }
-        itemsDiv.innerHTML = cart.map(item=>{
-            total+=item.price*item.quantity;
-            return `<div class="cart-item">
-                <img src="${item.image}" class="cart-item-image">
-                <div class="cart-item-details">
-                    <div class="cart-item-brand">${item.brand}</div>
-                    <div class="cart-item-title">${item.name}</div>
-                    <div class="cart-item-price">₹${item.price}</div>
-                    <div class="cart-quantity">
-                        <button onclick="updateQuantity(${item.id},-1)">−</button>
-                        <span style="color:var(--white);font-weight:600;">${item.quantity}</span>
-                        <button onclick="updateQuantity(${item.id},1)">+</button>
-                        <button onclick="removeFromCart(${item.id})" class="del-btn">Remove</button>
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
-        document.getElementById("cartTotal").textContent = total.toLocaleString('en-IN');
-    }
+function startPaymentTimer(){
 
-    window.updateQuantity = function(id,delta){ const item=cart.find(i=>i.id===id); if(item){ item.quantity+=delta; if(item.quantity<=0) cart=cart.filter(i=>i.id!==id); saveCart(); } };
-    window.removeFromCart = function(id){ cart=cart.filter(i=>i.id!==id); saveCart(); showToast("Removed from bag"); };
-    function addToCart(productId){ const p=products.find(p=>p.id===productId); const existing=cart.find(i=>i.id===productId); if(existing) existing.quantity++; else cart.push({...p,quantity:1}); saveCart(); showToast(`${p.name} added to bag ✓`); }
-    function showToast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+    clearInterval(paymentTimer);
 
-    function openCheckout() {
-        if(cart.length===0){ showToast("Your bag is empty!"); return; }
-        const total = cart.reduce((s,i)=>s+i.price*i.quantity,0);
-        document.getElementById("orderSummary").innerHTML = `<div class="order-summary-card"><strong>Order Summary</strong>${cart.map(i=>`<div class="order-line"><span>${i.name} ×${i.quantity}</span><span>₹${(i.price*i.quantity).toLocaleString('en-IN')}</span></div>`).join('')}<div class="order-total"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div></div>`;
-        document.getElementById("checkoutModal").style.display = "flex";
-    }
+    paymentSeconds = 300;
 
-    async function placeOrder() {
-        const fullName = document.getElementById("fullName")?.value.trim();
-        const mobileNumber = document.getElementById("mobileNumber")?.value.trim();
-        const customerEmail = document.getElementById("customerEmail")?.value.trim();
-        const deliveryAddress = document.getElementById("deliveryAddress")?.value.trim();
-        const city = document.getElementById("city")?.value.trim();
-        const pinCode = document.getElementById("pinCode")?.value.trim();
-        const state = document.getElementById("state")?.value.trim();
-        if (!fullName) { showToast("Please enter your full name"); return; }
-        if (!mobileNumber || mobileNumber.length < 10) { showToast("Please enter a valid mobile number"); return; }
-        if (!deliveryAddress) { showToast("Please enter your delivery address"); return; }
-        const totalAmount = cart.reduce((s,i)=>s+i.price*i.quantity,0);
-        const orderId = "CLOTH" + Date.now() + Math.floor(Math.random() * 10000);
-        const itemsList = cart.map(i => `${i.name} x${i.quantity} = ₹${i.price*i.quantity}`).join('\n');
-        const orderDetails = `New Order!\nID: ${orderId}\n${itemsList}\nTotal: ₹${totalAmount}\nPayment: COD`;
-        const btn = document.getElementById("placeOrderBtn");
-        btn.innerHTML = '⏳ Placing your order...'; btn.disabled = true;
-        try {
-            await emailjs.send("service_ofam3d9", "template_z2477uv", { fullName, mobileNumber, customerEmail: customerEmail||"Not provided", deliveryAddress, city, pinCode, state, message: orderDetails, order_id: orderId, total_amount: `₹${totalAmount}` });
-            document.getElementById("checkoutModal").style.display = "none";
-            document.getElementById("successOrderId").innerHTML = `<strong style="color:var(--gold)">Order ID:</strong> ${orderId}<br><br><strong style="color:var(--gold)">Name:</strong> ${fullName}<br><strong style="color:var(--gold)">Mobile:</strong> ${mobileNumber}<br><strong style="color:var(--gold)">Address:</strong> ${deliveryAddress}, ${city} - ${pinCode}${state?', '+state:''}<br><br><strong style="color:var(--gold)">Total: ₹${totalAmount.toLocaleString('en-IN')}</strong><br><br>📧 Confirmation email sent.<br>💰 Pay in cash upon delivery.`;
-            document.getElementById("orderSuccessModal").style.display = "flex";
-            cart = []; saveCart();
-            ['fullName','mobileNumber','customerEmail','deliveryAddress','city','pinCode','state'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=""; });
-        } catch(e) {
-            showToast("Failed to place order. Please try again.");
-        } finally {
-            btn.innerHTML = '✅ Confirm Order — Cash on Delivery'; btn.disabled = false;
+    const wrap = document.getElementById("paymentTimerWrap");
+    const text = document.getElementById("paymentTimerText");
+    const fill = document.getElementById("paymentTimerFill");
+
+    wrap.classList.add("show");
+
+    paymentTimer = setInterval(()=>{
+
+        paymentSeconds--;
+
+        const min = String(Math.floor(paymentSeconds/60)).padStart(2,'0');
+        const sec = String(paymentSeconds%60).padStart(2,'0');
+
+        text.textContent = `${min}:${sec}`;
+
+        const percent = (paymentSeconds / 300) * 100;
+
+        fill.style.width = percent + "%";
+
+        if(paymentSeconds <= 0){
+
+            clearInterval(paymentTimer);
+
+            wrap.classList.remove("show");
+
+            showToast("Payment session expired");
+
         }
+
+    },1000);
+
+}
+    newOrderProduct = product;
+    newOrderQty = qty || 1;
+
+    const loader = document.getElementById('fullScreenLoader');
+
+    loader.classList.add('active');
+
+    setTimeout(()=>{
+
+        loader.classList.remove('active');
+
+        document.getElementById('userDetailsModal')
+            .classList.add('active');
+
+    },3000);
+}function validateAndContinue(){
+
+    const name=document.getElementById('ud_name').value.trim(),
+    mobile=document.getElementById('ud_mobile').value.trim(),
+    address=document.getElementById('ud_address').value.trim(),
+    city=document.getElementById('ud_city').value.trim(),
+    pin=document.getElementById('ud_pin').value.trim();
+
+    if(!name || !mobile || mobile.replace(/\D/g,'').length<10 || !address || !city || !pin || pin.length<6){
+        showToast("Please fill all required fields correctly");
+        return;
     }
 
-    function getRelatedProducts(currentProductId, category) {
-        const related = products.filter(p => p.category === category && p.id !== currentProductId);
-        if(related.length === 0) return '';
-        return `<div class="related-section"><h3 class="related-title">You May Also Like</h3><div class="related-grid">${related.slice(0,4).map(p=>`<div class="related-card" onclick="showProductDetail(${p.id})"><div class="related-img-container"><img src="${p.image}" class="related-img"></div><div class="related-info"><div class="related-name">${p.name}</div><div class="related-price">₹${p.price}</div></div></div>`).join('')}</div></div>`;
-    }
+    const btn = document.getElementById('udContinueBtn');
 
-    function displayProducts(category = currentDisplayCategory) {
-        const filtered = products.filter(p => p.category === category);
-        const grid = document.getElementById("productGrid");
-        if(!grid) return;
-        
-        // Update category title
-        const categoryTitle = document.getElementById("categoryTitle");
-        if(category === 'gym') categoryTitle.textContent = '🔥 GYM First Choice Collection';
-        else if(category === 'bull') categoryTitle.textContent = '🐂 BULL PRINT Collection';
-        else categoryTitle.textContent = '✨ Extra Premium Collection';
-        
-        grid.innerHTML = filtered.map(p => `<div class="product-card">
-            <div class="product-image-container">
-                <span class="product-badge">${p.discount}</span>
-                <img src="${p.image}" class="product-image" onclick="showProductDetail(${p.id})">
+    btn.disabled = true;
+    btn.innerHTML = `
+        <span class="btn-spinner"></span>
+        Processing...
+    `;
+
+    setTimeout(()=>{
+
+        btn.disabled = false;
+        btn.innerHTML = `
+            Continue to Payment 
+            <i class="fas fa-arrow-right"></i>
+        `;
+
+        document.getElementById('userDetailsModal')
+            .classList.remove('active');
+
+        openOrderPayModal();
+
+    },2000);
+}function openOrderPayModal(){newOpayMethod=null;const p=newOrderProduct,qty=newOrderQty,total=p.price*qty;document.getElementById('opayOrderSummary').innerHTML=`<div class="opay-summary-header">Order Summary</div><div class="opay-line"><span>${p.name} ×${qty}</span><span>₹${(p.price*qty).toLocaleString('en-IN')}</span></div><div class="opay-line"><span>Size</span><span>${selectedSize}</span></div><div class="opay-line"><span>Shipping</span><span style="color:var(--green);">FREE</span></div><div class="opay-total-row"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div>`;document.getElementById('opayUpiCard').classList.remove('selected');document.getElementById('opayCodCard').classList.remove('selected');document.getElementById('opayUpiBox').classList.remove('show');document.getElementById('opayCodBox').classList.remove('show');const btn=document.getElementById('opayPlaceBtn');btn.textContent='Select a payment method';btn.disabled=true;document.getElementById('orderPayModal').classList.add('active');}
+window.selectOpayMethod=function(method){
+
+    newOpayMethod=method;
+
+    const total=newOrderProduct.price*newOrderQty;
+    const advance=Math.ceil(total/2);
+
+    document.getElementById('opayUpiCard')
+        .classList.toggle('selected',method==='upi');
+
+    document.getElementById('opayCodCard')
+        .classList.toggle('selected',method==='cod');
+
+    const payAmount = method==='upi' ? total : advance;
+    const codAmount = method==='upi' ? 0 : total-advance;
+
+    const upiLink =
+`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${payAmount}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`;
+
+    const html=`
+
+        <div class="opay-split-rows">
+
+            <div class="opay-split-r">
+                <span class="opay-split-label">Order Total</span>
+                <span class="opay-split-val">
+                    ₹${total.toLocaleString('en-IN')}
+                </span>
             </div>
-            <div class="product-info">
-                <div class="product-brand">${p.brand}</div>
-                <div class="product-title">${p.name}</div>
-                <div class="price-container">
-                    <span class="current-price">₹${p.price}</span>
-                    <span class="original-price">₹${p.originalPrice}</span>
-                    <span class="discount">${p.discount}</span>
-                </div>
-                <button class="add-to-cart" onclick="addToCart(${p.id})">Add to Bag</button>
+
+            <div class="opay-split-r">
+                <span class="opay-split-label">
+                    💚 Pay Now via UPI ${
+                        method==='upi' ? '(100%)' : '(50%)'
+                    }
+                </span>
+
+                <span class="opay-split-val" style="color:var(--gold)">
+                    ₹${payAmount.toLocaleString('en-IN')}
+                </span>
             </div>
-        </div>`).join('');
-        
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.cat === category);
-        });
-        
-        // SHOW/HIDE SLIDER BASED ON CATEGORY
-        const sliderSection = document.getElementById('sliderSection');
-        if(category === 'gym') {
-            sliderSection.classList.remove('hide');
-        } else {
-            sliderSection.classList.add('hide');
-        }
-    }
 
-    function loadSlider() {
-        const gymProducts = products.filter(p => p.category === 'gym');
-        const track = document.getElementById('gymSliderTrack');
-        if(track) track.innerHTML = gymProducts.map(p=>`<div class="slider-item" onclick="showProductDetail(${p.id})"><img src="${p.image}" alt="${p.name}"></div>`).join('');
-    }
-    
-    function setupSlider() {
-        const track = document.getElementById('gymSliderTrack');
-        const left = document.getElementById('gymSliderLeft');
-        const right = document.getElementById('gymSliderRight');
-        if(track && left && right) {
-            left.onclick = () => track.scrollBy({ left: -track.offsetWidth, behavior: 'smooth' });
-            right.onclick = () => track.scrollBy({ left: track.offsetWidth, behavior: 'smooth' });
-        }
-    }
+            <div class="opay-split-r">
+                <span class="opay-split-label">
+                    🚚 Pay on Delivery
+                </span>
 
-    window.showProductDetail = function(productId) {
-        currentProduct = products.find(p => p.id === productId);
-        if(!currentProduct) return;
-        selectedSize = currentProduct.sizes?.[1] || "M";
-        productQuantity = 1;
-        const container = document.getElementById("productDetailContainer");
-        container.innerHTML = `
-            <div><button class="back-home-btn" onclick="goBackToHome()">← Back to Collection</button></div>
-            <div class="product-detail-main">
-                <div class="main-image-container"><img src="${currentProduct.image}" class="main-image"></div>
-                <div>
-                    <div class="detail-brand">${currentProduct.brand}</div>
-                    <h1 class="detail-title">${currentProduct.name}</h1>
-                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
-                        <span class="detail-price">₹${currentProduct.price}</span>
-                        <span class="detail-original">₹${currentProduct.originalPrice}</span>
-                        <span class="detail-discount">${currentProduct.discount}</span>
-                    </div>
-                    <div class="size-label">Select Size</div>
-                    <div class="size-options">${(currentProduct.sizes||["S","M","L","XL"]).map(s=>`<button class="size-btn ${selectedSize===s?'selected':''}" onclick="selectSize('${s}',this)">${s}</button>`).join('')}</div>
-                    <div class="quantity-label">Quantity</div>
-                    <div class="quantity-selector">
-                        <button class="quantity-btn" onclick="changeQuantity(-1)">−</button>
-                        <span class="qty-display" id="qtyVal">1</span>
-                        <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn-add-cart" onclick="addToCartFromDetail()">Add to Bag</button>
-                        <button class="btn-buy-now" onclick="buyNowFromDetail()">⚡ Buy Now</button>
-                    </div>
-                </div>
+                <span class="opay-split-val">
+                    ₹${codAmount.toLocaleString('en-IN')}
+                </span>
             </div>
-            ${getRelatedProducts(currentProduct.id, currentProduct.category)}`;
-        document.getElementById("mainContent").style.display = "none";
-        document.getElementById("productDetailPage").style.display = "block";
-        window.scrollTo(0,0);
-    };
 
-    window.goBackToHome = function() { 
-        document.getElementById("mainContent").style.display = "block"; 
-        document.getElementById("productDetailPage").style.display = "none"; 
-        displayProducts(currentDisplayCategory); 
-        window.scrollTo(0,0);
-    };
-    
-    window.buyNowFromDetail = function() { cart = [{...currentProduct, quantity: productQuantity}]; saveCart(); openCheckout(); };
-    window.selectSize = function(size, el) { selectedSize = size; document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); };
-    window.changeQuantity = function(d) { productQuantity = Math.max(1, productQuantity + d); const span = document.getElementById("qtyVal"); if(span) span.innerText = productQuantity; };
-    window.addToCartFromDetail = function() { const existing = cart.find(i => i.id === currentProduct.id); if(existing) existing.quantity += productQuantity; else cart.push({...currentProduct, quantity: productQuantity}); saveCart(); showToast("Added to bag ✓"); };
+            <div class="opay-split-r">
+                <span class="opay-split-label" style="color:var(--gold)">
+                    Total
+                </span>
 
-    function toggleCart(){ document.getElementById("cartSidebar").classList.toggle("open"); document.getElementById("cartOverlay").classList.toggle("active"); }
-    function closeModals(){ ["checkoutModal","contactModal","orderSuccessModal"].forEach(id=>document.getElementById(id).style.display="none"); }
-    function showSearchModal(){ document.getElementById("searchModal").classList.toggle("open"); if(document.getElementById("searchModal").classList.contains("open")) document.getElementById("searchModalInput").focus(); }
-    function performSearch(){ const q=document.getElementById("searchModalInput").value.toLowerCase(); const res=document.getElementById("searchResults"); if(!q){ res.innerHTML='<div style="padding:14px;color:var(--muted);font-size:13px;">Type to search...</div>'; return; } const filtered=products.filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q)); res.innerHTML=filtered.length? filtered.map(p=>`<div class="search-result-item" onclick="selectSearchProduct(${p.id})"><img src="${p.image}"><div><div style="color:var(--white);font-size:12px;">${p.name}</div><div>₹${p.price}</div></div></div>`).join('') : '<div style="padding:14px;color:var(--muted);font-size:13px;">No products found</div>'; }
-    function selectSearchProduct(id){ document.getElementById("searchModal").classList.remove("open"); showProductDetail(id); }
-    function closeSearchModal(){ document.getElementById("searchModal").classList.remove("open"); }
-    function openMenu(){ document.getElementById("sideMenu").classList.add("open"); document.getElementById("menuOverlay").classList.add("active"); }
-    function closeMenu(){ document.getElementById("sideMenu").classList.remove("open"); document.getElementById("menuOverlay").classList.remove("active"); }
-    function showHome() { 
-        document.getElementById("mainContent").style.display = "block"; 
-        document.getElementById("productDetailPage").style.display = "none"; 
-        displayProducts(currentDisplayCategory); 
-        closeMenu(); 
-        window.scrollTo(0,0);
+                <span class="opay-split-val" style="color:var(--gold)">
+                    ₹${total.toLocaleString('en-IN')}
+                </span>
+            </div>
+
+        </div>
+
+        <button
+            class="opay-open-upi-btn"
+            style="margin-top:16px;width:100%;"
+            onclick="window.location.href='${upiLink}'">
+
+            💳 Pay Now ₹${payAmount.toLocaleString('en-IN')}
+
+        </button>
+    `;
+
+    if(method==='upi'){
+
+        document.getElementById('opayUpiBox').innerHTML=html;
+
+        document.getElementById('opayUpiBox')
+            .classList.add('show');
+
+        document.getElementById('opayCodBox')
+            .classList.remove('show');
+
+        document.getElementById('opayPlaceBtn')
+            .textContent='✅ Place Order — Full Payment';
+
+    }else{
+
+        document.getElementById('opayCodBox').innerHTML=html;
+
+        document.getElementById('opayCodBox')
+            .classList.add('show');
+
+        document.getElementById('opayUpiBox')
+            .classList.remove('show');
+
+        document.getElementById('opayPlaceBtn')
+            .textContent='✅ Confirm Order — 50% Advance';
     }
-    
-    function setCategory(cat) { 
-        currentDisplayCategory = cat; 
-        displayProducts(cat);
-        // Scroll to products section smoothly
-        document.querySelector('.category-buttons-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.getElementById('opayPlaceBtn').disabled=false;
+};
+
+
+window.openOpayUPI=function(){const total=newOrderProduct.price*newOrderQty;window.location.href=`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent('Clothing India Order')}`;};
+window.openOpayCODUPI=function(){const total=newOrderProduct.price*newOrderQty,advance=Math.ceil(total/2);window.location.href=`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${advance}&cu=INR&tn=${encodeURIComponent('Clothing India Advance 50%')}`;};
+window.copyUpiId=function(){navigator.clipboard.writeText(UPI_ID).then(()=>showToast("UPI ID copied ✓")).catch(()=>showToast(UPI_ID));};
+window.placeNewOrder=async function(){if(!newOpayMethod){showToast("Please select a payment method!");return;}const name=document.getElementById('ud_name').value.trim(),mobile=document.getElementById('ud_mobile').value.trim(),email=document.getElementById('ud_email').value.trim(),address=document.getElementById('ud_address').value.trim(),city=document.getElementById('ud_city').value.trim(),pin=document.getElementById('ud_pin').value.trim(),state=document.getElementById('ud_state').value.trim();const p=newOrderProduct,qty=newOrderQty,total=p.price*qty,advance=Math.ceil(total/2),orderId="CLOTH"+Date.now()+Math.floor(Math.random()*10000),payNote=newOpayMethod==='upi'?`Payment: Full UPI ₹${total}`:`Payment: 50% Advance (₹${advance}) UPI + 50% COD (₹${total-advance})`;const btn=document.getElementById('opayPlaceBtn');btn.innerHTML='<span class="btn-spinner"></span> Placing order...';btn.disabled=true;try{await emailjs.send("service_ofam3d9","template_z2477uv",{fullName:name,mobileNumber:mobile,customerEmail:email||"Not provided",deliveryAddress:address,city,pinCode:pin,state,message:`🛍️ Buy Now Order!\nID: ${orderId}\n${p.name} x${qty} (Size: ${selectedSize}) = ₹${total}\n${payNote}\nUPI ID: ${UPI_ID}`,order_id:orderId,total_amount:`₹${total}`});document.getElementById('orderPayModal').classList.remove('active');document.getElementById('nsuccessDetails').innerHTML=`<div class="nsuccess-detail-row"><span>Order ID</span><span>${orderId}</span></div><div class="nsuccess-detail-row"><span>Name</span><span>${name}</span></div><div class="nsuccess-detail-row"><span>Mobile</span><span>${mobile}</span></div><div class="nsuccess-detail-row"><span>Delivery</span><span>${city} - ${pin}</span></div><div class="nsuccess-detail-row"><span>Product</span><span>${p.name}</span></div><div class="nsuccess-detail-row"><span>Size</span><span>${selectedSize}</span></div>`;document.getElementById('newSuccessModal').classList.add('active');newOrderProduct=null;}catch(err){showToast("Failed to place order. Please try again.");btn.innerHTML=newOpayMethod==='upi'?'✅ Place Order — UPI Full Payment':'✅ Confirm Order (50% Advance + COD)';btn.disabled=false;}};
+document.addEventListener("DOMContentLoaded",()=>{loadCart();displayProducts('gym');loadSlider();setupSlider();document.querySelectorAll('.category-btn').forEach(b=>b.onclick=()=>setCategory(b.dataset.cat));document.getElementById("homeLink").onclick=showHome;document.getElementById("searchIconBtn").onclick=showSearchModal;document.getElementById("searchModalInput").oninput=performSearch;document.getElementById("cartIconBtn").onclick=toggleCart;document.getElementById("closeCart").onclick=toggleCart;document.getElementById("cartOverlay").onclick=toggleCart;document.getElementById("checkoutBtn").onclick=openCheckout;document.getElementById("hamburgerBtn").onclick=openMenu;document.getElementById("closeMenuBtn").onclick=closeMenu;document.getElementById("menuOverlay").onclick=closeMenu;document.getElementById("menuMainPage").onclick=showHome;document.getElementById("menuContactHelp").onclick=()=>{document.getElementById("contactModal").style.display="flex";closeMenu();};document.getElementById("closeSuccessBtn").onclick=()=>{document.getElementById("orderSuccessModal").style.display="none";showHome();};document.querySelectorAll(".close-modal").forEach(b=>b.onclick=closeModals);document.getElementById("closeContactBtn").onclick=()=>document.getElementById("contactModal").style.display="none";document.getElementById("placeOrderBtn").onclick=placeOrder;document.getElementById("udContinueBtn").onclick=validateAndContinue;document.getElementById("nsuccessShopBtn").onclick=()=>{document.getElementById('newSuccessModal').classList.remove('active');showHome();};document.getElementById("userDetailsModal").addEventListener('click',e=>{if(e.target===document.getElementById("userDetailsModal"))document.getElementById("userDetailsModal").classList.remove('active');});document.getElementById("orderPayModal").addEventListener('click',e=>{if(e.target===document.getElementById("orderPayModal"))document.getElementById("orderPayModal").classList.remove('active');});window.onclick=e=>{if(e.target.classList.contains('modal'))closeModals();if(!e.target.closest('.search-modal')&&!e.target.closest('#searchIconBtn'))document.getElementById("searchModal").classList.remove("open");};});
+
+/* =========================
+   MOBILE + DESKTOP BACK FIX
+========================= */
+
+history.replaceState({page:"home"}, "");
+
+// Product page
+const oldShowProductDetail = window.showProductDetail;
+
+window.showProductDetail = function(pid){
+    history.pushState({page:"product"}, "");
+    oldShowProductDetail(pid);
+};
+
+// Cart
+const oldToggleCart = toggleCart;
+
+toggleCart = function(){
+
+    const cartOpen = document
+        .getElementById("cartSidebar")
+        .classList.contains("open");
+
+    if(!cartOpen){
+        history.pushState({page:"cart"}, "");
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        loadCart(); 
-        displayProducts('gym'); 
-        loadSlider(); 
-        setupSlider();
-        
-        document.querySelectorAll('.category-btn').forEach(btn => btn.onclick = () => setCategory(btn.dataset.cat));
-        document.getElementById("homeLink").onclick = showHome;
-        document.getElementById("searchIconBtn").onclick = showSearchModal;
-        document.getElementById("searchModalInput").oninput = performSearch;
-        document.getElementById("cartIconBtn").onclick = toggleCart;
-        document.getElementById("closeCart").onclick = toggleCart;
-        document.getElementById("cartOverlay").onclick = toggleCart;
-        document.getElementById("checkoutBtn").onclick = openCheckout;
-        document.getElementById("hamburgerBtn").onclick = openMenu;
-        document.getElementById("closeMenuBtn").onclick = closeMenu;
-        document.getElementById("menuOverlay").onclick = closeMenu;
-        document.getElementById("menuMainPage").onclick = showHome;
-        document.getElementById("menuContactHelp").onclick = () => { document.getElementById("contactModal").style.display="flex"; closeMenu(); };
-        document.getElementById("closeSuccessBtn").onclick = () => { document.getElementById("orderSuccessModal").style.display="none"; showHome(); };
-        document.querySelectorAll(".close-modal").forEach(btn => btn.onclick = closeModals);
-        document.getElementById("closeContactBtn").onclick = () => document.getElementById("contactModal").style.display="none";
-        document.getElementById("placeOrderBtn").onclick = placeOrder;
-        
-        window.onclick = (e) => {
-            if(e.target.classList.contains('modal')) closeModals();
-            if(!e.target.closest('.search-modal') && !e.target.closest('#searchIconBtn')) closeSearchModal();
-        };
-    });
+    oldToggleCart();
+};
+
+// Menu
+const oldOpenMenu = openMenu;
+
+openMenu = function(){
+    history.pushState({page:"menu"}, "");
+    oldOpenMenu();
+};
+
+// Search
+const oldShowSearchModal = showSearchModal;
+
+showSearchModal = function(){
+
+    const isOpen = document
+        .getElementById("searchModal")
+        .classList.contains("open");
+
+    if(!isOpen){
+        history.pushState({page:"search"}, "");
+    }
+
+    oldShowSearchModal();
+};
+
+// Buy now modal history
+const oldStartBuyNowFlow = startBuyNowFlow;
+
+startBuyNowFlow = function(product, qty){
+    history.pushState({page:"buyNow"}, "");
+    oldStartBuyNowFlow(product, qty);
+};
+
+
+// BACK BUTTON
+window.addEventListener("popstate", function(){
+
+    // Search close
+    if(document.getElementById("searchModal")
+        .classList.contains("open")){
+
+        document.getElementById("searchModal")
+            .classList.remove("open");
+
+        return;
+    }
+
+    // Cart close
+    if(document.getElementById("cartSidebar")
+        .classList.contains("open")){
+
+        document.getElementById("cartSidebar")
+            .classList.remove("open");
+
+        document.getElementById("cartOverlay")
+            .classList.remove("active");
+
+        return;
+    }
+
+    // Menu close
+    if(document.getElementById("sideMenu")
+        .classList.contains("open")){
+
+        closeMenu();
+        return;
+    }
+
+    // Product detail back
+    if(document.getElementById("productDetailPage")
+        .style.display === "block"){
+
+        goBackToHome();
+        return;
+    }
+
+    // User detail modal close
+    if(document.getElementById("userDetailsModal")
+        .classList.contains("active")){
+
+        document.getElementById("userDetailsModal")
+            .classList.remove("active");
+
+        return;
+    }
+
+    // Payment modal close
+    if(document.getElementById("orderPayModal")
+        .classList.contains("active")){
+
+        document.getElementById("orderPayModal")
+            .classList.remove("active");
+
+        return;
+    }
+
+    // Success modal close
+    if(document.getElementById("newSuccessModal")
+        .classList.contains("active")){
+
+        document.getElementById("newSuccessModal")
+            .classList.remove("active");
+
+        showHome();
+
+        return;
+    }
+
+});
+
 </script>
 </body>
 </html>
